@@ -9,7 +9,7 @@ import com.revature.p1.annotations.MyField;
 @MyEntity(name = "Person")
 public class Person
 {
-    @MyColumn(table = "person",name = "name",nullable = false,unique = false,type = ColumnType.VARCHAR, length = 20)
+    @MyColumn(table = "person",name = "name",nullable = false,unique = false,type = ColumnType.VARCHAR, length = 20,pk = false,fk = false,reference = "")
     private String name;
 
     @MyField(name = "age")

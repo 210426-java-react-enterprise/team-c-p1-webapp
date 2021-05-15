@@ -17,4 +17,7 @@ public @interface MyColumn
     boolean unique() default false;
     ColumnType type() default ColumnType.VARCHAR;
     int length() default 0;
+    boolean pk() default false;
+    boolean fk() default false;
+    String reference();
 }
