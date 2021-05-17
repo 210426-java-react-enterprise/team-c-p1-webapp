@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @MyEntity(name = "customer")
-public class Customer
+public class Customer extends MySavable
 {
     @MyColumn(  name = "first_name",type = ColumnType.VARCHAR,length = 20,
                 nullable = false,pk = false,fk = false,reference = "",unique = false,delete = "cascade")

@@ -1,6 +1,5 @@
 package com.revature.p1.orms;
 
-import com.revature.p1.annotations.ColumnType;
 import com.revature.p1.annotations.MyColumn;
 import com.revature.p1.annotations.MyEntity;
 import com.revature.p1.entities.Column;
@@ -10,12 +9,10 @@ import java.util.*;
 
 public class SchemaCreator
 {
-    private Map<String, List<Column>> tables;
     private List<Class<?>> classes;
 
     public SchemaCreator(List<Class<?>> classes)
     {
-        this.tables = new HashMap<>();
         this.classes = classes;
     }
 
@@ -40,8 +37,9 @@ public class SchemaCreator
         }
 
         List<String> queries = createQuery(classListMap);
+        System.out.println("********** createSchema() queries **********");
         queries.forEach(System.out::println);
-
+        System.out.println("********************************************");
         return false;
     }
 
@@ -63,17 +61,12 @@ public class SchemaCreator
                             case DATE -> "DATE";
                         };
                 sb.append(column.name()).append(" ").append(type).append(column.nullable() ? "" : " NOT NULL ")
-                .append(column.unique() ? "UNIQUE " : "").append(column.pk() ? "PRIMARY KEY " : "").append(column.fk() ? "" : "")
+                .append(column.unique() ? "UNIQUE " : "").append(column.pk() ? "PRIMARY KEY " : "")
                 .append(column.fk() ? "REFERENCES " + column.reference() + " ON DELETE " + column.delete() : "").append(",");
             }));
             sb.deleteCharAt(sb.lastIndexOf(",")).append(")");
             queries.add(sb.toString());
-
-
         });
-
-
-
         return queries;
     }
 

@@ -6,7 +6,7 @@ import com.revature.p1.annotations.MyColumn;
 import com.revature.p1.annotations.MyEntity;
 
 @MyEntity(name = "transaction")
-public class Transaction
+public class Transaction extends MySavable
 {
     @MyColumn(  name = "type",nullable = false,unique = false,type = ColumnType.VARCHAR,length = 10,pk = false,
                 fk = false,reference = "",delete = "cascade")
