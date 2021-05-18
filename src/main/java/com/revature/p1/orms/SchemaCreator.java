@@ -2,7 +2,6 @@ package com.revature.p1.orms;
 
 import com.revature.p1.annotations.MyColumn;
 import com.revature.p1.annotations.MyEntity;
-import com.revature.p1.entities.Column;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -37,9 +36,9 @@ public class SchemaCreator
         }
 
         List<String> queries = createQuery(classListMap);
-        System.out.println("********** createSchema() queries **********");
+        System.out.println("\n********** createSchema() queries **********");
         queries.forEach(System.out::println);
-        System.out.println("********************************************");
+        System.out.println("********************************************\n");
         return false;
     }
 

@@ -2,6 +2,7 @@ package com.revature.p1;
 
 
 import com.revature.p1.entities.*;
+import com.revature.p1.orms.ObjectRetriever;
 import com.revature.p1.orms.ObjectSaver;
 import com.revature.p1.orms.SchemaCreator;
 
@@ -20,7 +21,9 @@ public class Driver
 
         SchemaCreator schemaCreator = new SchemaCreator(classes);
         schemaCreator.createSchema();
+
 //******************************************************************************************************************************************
+
         Customer sean = new Customer("sean", "taba", "458745698", "sean@gmail.com", "4758695478",
                                          "seantaba", "password", "", "56442 sddfdf hgdgf",
                                          "denver", "colorado", "45874");
@@ -44,6 +47,9 @@ public class Driver
 
         ObjectSaver<MySavable> saver = new ObjectSaver<>(savables);
         saver.saveData();
+
+        ObjectRetriever loader = new ObjectRetriever(savables);
+        loader.loadObject();
     }
 
 
