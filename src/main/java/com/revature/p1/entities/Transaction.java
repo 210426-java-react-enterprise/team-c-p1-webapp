@@ -22,9 +22,9 @@ public class Transaction extends MySavable
 
     @MyColumn(  name = "account_number",nullable = false,unique = false,type = ColumnType.VARCHAR,length = 10,pk = false,
             fk = true,reference = "account(number)",delete = "cascade")
-    private final int accountNumber;
+    private final String accountNumber;
 
-    public Transaction(String type, double amount, double balance, int accountNumber)
+    public Transaction(String type, double amount, double balance, String accountNumber)
     {
         this.type = type;
         this.amount = amount;
@@ -32,7 +32,7 @@ public class Transaction extends MySavable
         this.accountNumber = accountNumber;
     }
 
-    public int getAccountNumber()
+    public String getAccountNumber()
     {
         return accountNumber;
     }

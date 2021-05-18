@@ -5,6 +5,7 @@ import com.revature.p1.entities.*;
 import com.revature.p1.orms.ObjectRetriever;
 import com.revature.p1.orms.ObjectSaver;
 import com.revature.p1.orms.SchemaCreator;
+import com.revature.p1.utilities.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,11 @@ public class Driver
 
     public static void main(String[] args)
     {
+        Controller controller = new Controller();
+        controller.run();
+
+
+
         List<Class<?>> classes = new ArrayList<>();
         classes.add(Customer.class);
         classes.add(Account.class);
@@ -33,8 +39,8 @@ public class Driver
         Credential seanCredential = new Credential("seantaba","password", "458965748");
         Credential jonCredential  = new Credential("jondoe", "password", "124536254");
 
-        Transaction seanTransaction = new Transaction("deposit", 25.36, 540.25, 101);
-        Transaction jonTransaction = new Transaction("withdraw", 125.78, 2547.49, 124);
+        Transaction seanTransaction = new Transaction("deposit", 25.36, 540.25, "101");
+        Transaction jonTransaction = new Transaction("withdraw", 125.78, 2547.49, "124");
 
         List<MySavable> savables = new ArrayList<>();
 

@@ -26,4 +26,34 @@ public class Credential extends MySavable
         this.password = password;
         this.ssn = ssn;
     }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+    public String getSsn()
+    {
+        return ssn;
+    }
+
+    public void setSsn(String ssn)
+    {
+        this.ssn = ssn;
+    }
 }
