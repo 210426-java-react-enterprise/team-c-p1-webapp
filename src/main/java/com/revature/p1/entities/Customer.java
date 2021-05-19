@@ -77,8 +77,7 @@ public class Customer extends MySavable
         return accounts;
     }
 
-    public Customer(String firstName, String lastName, String ssn, String email, String phone, String username, String password,
-            String unit, String street, String city, String state, String zip)
+    public Customer(String firstName, String lastName, String ssn, String email, String phone)
     {
         this.firstName = firstName;
         this.lastName = lastName;

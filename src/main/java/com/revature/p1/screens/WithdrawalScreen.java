@@ -5,6 +5,7 @@ import com.revature.p1.utilities.InputValidator;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 public class WithdrawalScreen extends Screen
 {
@@ -35,6 +36,12 @@ public class WithdrawalScreen extends Screen
 //                dao.updateAccount(CurrentAccount.getInstance().getAccount());
 
         } catch (SQLException e)
+        {
+            e.printStackTrace();
+        } catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        } catch (InterruptedException e)
         {
             e.printStackTrace();
         }

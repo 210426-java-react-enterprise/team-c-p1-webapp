@@ -1,8 +1,11 @@
 package com.revature.p1.screens;
 
+import com.revature.p1.entities.Credential;
+import com.revature.p1.entities.Customer;
 import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
 import com.revature.p1.utilities.ScreenManager;
+import com.revature.p1.utilities.datasource.Session;
 
 import java.util.Scanner;
 
@@ -12,11 +15,13 @@ public class UserAccountLoginScreen extends Screen {
     private InputValidator inputValidator;
     private ScreenManager screenManager;
     private MyObjectRelationalMapper orm;
+    private Session session;
 
-    public UserAccountLoginScreen(Scanner scanner, InputValidator inputValidator, ScreenManager screenManager, MyObjectRelationalMapper orm)
+    public UserAccountLoginScreen(  Scanner scanner, InputValidator inputValidator, ScreenManager screenManager,
+                                    MyObjectRelationalMapper orm, Session session)
     {
         super("/login");
-
+        this.session = session;
         this.scanner = scanner;
         this.inputValidator = inputValidator;
         this.screenManager = screenManager;
@@ -40,14 +45,16 @@ public class UserAccountLoginScreen extends Screen {
             String password = inputValidator.validate(input, "/password");
             if (password == null)
                 return;
-//            if(password.equals(dao.isCorrectPassword(username)))
-//            {
-//                CurrentCustomer.getInstance().setCustomer(dao.getCustomer(username));
-//                screenManager.navigate("/customer account");
-//            } else
-//            {
-//                System.out.println("Password was not correct. Please try again.");
-//            }
+            Credential credential = ((Credential)orm.read(new Credential(username, "", "")));
+            if(password.equals(credential.getPassword()))
+            {
+                session.setCustomer((Customer) orm.read(new Customer(null, null, credential.getSsn(), null,
+                                                          null)));
+                screenManager.navigate("/customer account");
+            } else
+            {
+                System.out.println("Password was not correct. Please try again.");
+            }
 
         } catch (Exception e)
         {

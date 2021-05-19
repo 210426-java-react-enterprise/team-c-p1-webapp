@@ -23,7 +23,7 @@
 hs_err_pid*
 
 # Build folders
-../myp1/target/
+/target
 
 # IDE specific files
 .idea

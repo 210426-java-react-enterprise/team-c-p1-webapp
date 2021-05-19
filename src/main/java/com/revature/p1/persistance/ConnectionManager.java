@@ -1,31 +1,31 @@
 package com.revature.p1.persistance;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+
 
 public class ConnectionManager {
 
-    public ConnectionManager(Properties properties)
-    {
-
-    }
-
-    public Connection getConnection()
-    {
-        Connection connection = null;
+    static{
         try
         {
-            connection = DriverManager.getConnection(
-                    System.getenv("host-url"),
-                    System.getenv("username"),
-                    System.getenv("Sean-Java-React-Course")
-                    );
-        } catch (SQLException e)
+            Class.forName("org.postgresql.Driver");
+            DbConnectionPool.initialize(System.getenv("host-url"),
+                                         System.getenv("username"),
+                                         System.getenv("password"),
+                                         5);
+        } catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
-        return connection;
+    }
+
+    public static Connection getConnection()
+    {
+          return DbConnectionPool.getInstance().getConnection();
+    }
+
+    public static boolean releaseConnection(Connection connection)
+    {
+        return releaseConnection(connection);
     }
 }

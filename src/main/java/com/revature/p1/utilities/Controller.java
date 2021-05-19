@@ -4,13 +4,12 @@ import com.revature.p1.exceptions.IllegalInputException;
 import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.persistance.ConnectionManager;
 import com.revature.p1.screens.*;
+import com.revature.p1.services.UserService;
+import com.revature.p1.utilities.datasource.Session;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Scanner;
 
 public class Controller {
@@ -18,7 +17,7 @@ public class Controller {
     boolean appRunning;
     private final Scanner scanner;
     private final Connection connection;
-    private final Properties properties;
+
     private final ConnectionManager connectionManager;
     private final MyObjectRelationalMapper orm;
     private final InputValidator inputValidator;
@@ -31,23 +30,26 @@ public class Controller {
     private final WithdrawalScreen withdrawalScreen;
     private final BankAccountScreen bankAccountScreen;
     private final ScreenManager screenManager;
+    private final Session session;
+    private final UserService userService;
 
 
     public Controller()
     {
-        properties = new Properties();
-        try {
-            properties.load(new FileReader("src/main/resources/application.properties"));
+//        properties = new Properties();
+//        try {
+//            properties.load(new FileReader("src/main/resources/application.properties"));
+//
+//        } catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
 
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        this.connectionManager = new ConnectionManager(properties);
+        this.connectionManager = new ConnectionManager();
         this.connection = this.connectionManager.getConnection();
-
+        this.session = new Session(null, null);
         this.orm = new MyObjectRelationalMapper(connection);
+        this.userService = new UserService(orm, null, session);
 
         this.inputValidator = new InputValidator(orm);
 
@@ -57,11 +59,11 @@ public class Controller {
 
         this.startScreen = new StartScreen(scanner,inputValidator, screenManager,this);
         this.createUserAccountScreen = new CreateUserAccountScreen(scanner, inputValidator, orm);
-        this.userAccountLoginScreen = new UserAccountLoginScreen(scanner, inputValidator, screenManager, orm);
-        this.depositScreen = new DepositScreen(scanner, inputValidator, orm);
+        this.userAccountLoginScreen = new UserAccountLoginScreen(scanner, inputValidator, screenManager, orm,session);
+        this.depositScreen = new DepositScreen(scanner, inputValidator, orm,session);
         this.withdrawalScreen = new WithdrawalScreen(scanner, inputValidator, orm);
-        this.bankAccountScreen = new BankAccountScreen();
-        this.userAccountScreen = new UserAccountScreen(scanner, inputValidator, orm, screenManager);
+        this.bankAccountScreen = new BankAccountScreen(session);
+        this.userAccountScreen = new UserAccountScreen(scanner, inputValidator, orm, screenManager,session);
 
         screens.add(startScreen);
         screens.add(createUserAccountScreen);

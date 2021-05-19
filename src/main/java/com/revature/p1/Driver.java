@@ -15,6 +15,10 @@ public class Driver
 
     public static void main(String[] args)
     {
+//        List<Class<?>> list = new ArrayList<>();
+//        list.add(Credential.class);
+//        SchemaCreator creator = new SchemaCreator(list);
+//        creator.createSchema();
         Controller controller = new Controller();
         controller.run();
 
@@ -30,12 +34,8 @@ public class Driver
 
 //******************************************************************************************************************************************
 
-        Customer sean = new Customer("sean", "taba", "458745698", "sean@gmail.com", "4758695478",
-                                         "seantaba", "password", "", "56442 sddfdf hgdgf",
-                                         "denver", "colorado", "45874");
-        Customer jon =  new Customer("jon","doe","784125478","jon@yahoo.com","6541254789",
-                                     "jondoe","password","541","4544 asd adaddff","detroit",
-                                     "michigan","74584");
+        Customer sean = new Customer("sean", "taba", "458745698", "sean@gmail.com", "4758695478");
+        Customer jon =  new Customer("jon","doe","784125478","jon@yahoo.com","6541254789");
         Credential seanCredential = new Credential("seantaba","password", "458965748");
         Credential jonCredential  = new Credential("jondoe", "password", "124536254");
 

@@ -6,15 +6,21 @@ import com.revature.p1.annotations.MyEntity;
 import com.revature.p1.entities.Credential;
 import com.revature.p1.entities.MySavable;
 import com.revature.p1.exceptions.NotSavableObjectException;
+import com.revature.p1.persistance.ConnectionManager;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-public class MyObjectRelationalMapper
+public class MyObjectRelationalMapper<T>
 {
     private Connection connection;
 
@@ -23,14 +29,15 @@ public class MyObjectRelationalMapper
         this.connection = connection;
     }
 
-    public MySavable read(MySavable savable)
+    public T read(T savable) throws SQLException
     {
+        List<Field> fields = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         try
         {
             if (!savable.getClass().isAnnotationPresent(MyEntity.class))
                 throw new NotSavableObjectException("Object is not a 'Savable' type!");
-            List<Field> fields = new ArrayList<>(Arrays.asList(savable.getClass().getDeclaredFields()));
+            fields.addAll(Arrays.asList(savable.getClass().getDeclaredFields()));
             List<Field> pks = fields.stream()
                                     .filter(field -> field.isAnnotationPresent(MyColumn.class) &&
                                             field.getAnnotation(MyColumn.class).pk())
@@ -48,7 +55,7 @@ public class MyObjectRelationalMapper
                                             })
                                     .collect(Collectors.toList());
             if (pks.size() == 0) return savable;
-            sb.append("SELECT * FROM ").append(savable.getClass().getAnnotation(MyEntity.class).name())
+            sb.append("SELECT * FROM ").append("project1.").append(savable.getClass().getAnnotation(MyEntity.class).name())
               .append(" WHERE ").append(pks.get(0).getAnnotation(MyColumn.class).name()).append(" = ")
               .append(pks.get(0).getAnnotation(MyColumn.class).type() == ColumnType.VARCHAR ? "'" : "")
               .append(pks.get(0).get(savable))
@@ -59,7 +66,38 @@ public class MyObjectRelationalMapper
         }
 
         System.out.println(sb);
-        ((Credential)savable).setPassword(sb.toString());
+        //((Credential)savable).setPassword(sb.toString());
+
+        PreparedStatement statement = connection.prepareStatement(sb.toString());
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next())
+        {
+            List<Method> methods = new ArrayList<>(Arrays.asList(savable.getClass().getDeclaredMethods()));
+            fields.forEach(field ->
+                           {
+                               methods.forEach(method ->
+                                               {
+                                                   if (method.getName().toLowerCase(Locale.ROOT).startsWith("set"))
+                                                   {
+                                                       String methodName = method.getName().toLowerCase(Locale.ROOT).substring(3);
+                                                       if (field.getName().toLowerCase(Locale.ROOT).equals(methodName))
+                                                       {
+                                                           System.out.println("field: " + field.getName() + "\tmethod: " + method.getName());
+                                                           try
+                                                           {
+                                                               field.setAccessible(true);
+                                                               method.invoke(savable, resultSet.getString(field.getAnnotation(MyColumn.class).name()));
+                                                               field.setAccessible(false);
+                                                           } catch (IllegalAccessException | SQLException | InvocationTargetException e)
+                                                           {
+                                                               e.printStackTrace();
+                                                           }
+                                                       }
+                                                   }
+                                               });
+                           });
+        }
         return savable;
     }
 

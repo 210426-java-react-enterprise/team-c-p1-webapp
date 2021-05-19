@@ -6,9 +6,11 @@ import com.revature.p1.exceptions.IllegalInputException;
 import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
 import com.revature.p1.utilities.ScreenManager;
+import com.revature.p1.utilities.datasource.Session;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 public class UserAccountScreen extends Screen
 {
@@ -16,16 +18,18 @@ public class UserAccountScreen extends Screen
     private InputValidator inputValidator;
     private MyObjectRelationalMapper orm;
     private ScreenManager screenManager;
+    private Session session;
 
 
-    public UserAccountScreen(Scanner scanner, InputValidator inputValidator, MyObjectRelationalMapper orm, ScreenManager screenManager)
+    public UserAccountScreen(   Scanner scanner, InputValidator inputValidator, MyObjectRelationalMapper orm,
+                                ScreenManager screenManager, Session session)
     {
         super("/customer account");
-
         this.scanner = scanner;
         this.inputValidator = inputValidator;
         this.orm = orm;
         this.screenManager = screenManager;
+        this.session = session;
     }
 
     private Account getCustomerAccount()
@@ -38,7 +42,7 @@ public class UserAccountScreen extends Screen
                 return null;
 
             Account account = null;
-            for (Account acc : CurrentCustomer.getInstance().getCustomer().getAccounts())
+            for (Account acc : session.getCustomer().getAccounts())
             {
                 if (acc.getNumber().equals(input))
                 {
@@ -51,7 +55,14 @@ public class UserAccountScreen extends Screen
         {
             e.printStackTrace();
             return null;
+        } catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     @Override
@@ -60,7 +71,7 @@ public class UserAccountScreen extends Screen
         main:
         while (true)
         {
-            Customer customer = CurrentCustomer.getInstance().getCustomer();
+            Customer customer = session.getCustomer();
             System.out.println(String.format("\n*** %s's accounts ***\n", customer.getFirstName()));
 
             if (customer.getAccounts().size() != 0)
@@ -113,7 +124,7 @@ public class UserAccountScreen extends Screen
 //                        }
                         break;
                     case 2:
-                        if (CurrentCustomer.getInstance().getCustomer().getAccounts().size() == 0)
+                        if (session.getCustomer().getAccounts().size() == 0)
                         {
                             System.out.println("You have no accounts to make transactions. Please create an account first.");
                             break;
@@ -135,11 +146,11 @@ public class UserAccountScreen extends Screen
                         switch (choice)
                         {
                             case 1:
-                                CurrentAccount.getInstance().setAccount(account);
+                                session.setAccount(account);
                                 screenManager.navigate("/deposit");
                                 break;
                             case 2:
-                                CurrentAccount.getInstance().setAccount(account);
+                                session.setAccount(account);
                                 screenManager.navigate("/withdraw");
                             case 3:
                                 break;
@@ -162,8 +173,8 @@ public class UserAccountScreen extends Screen
                         break;
 
                     case 4:
-                        CurrentCustomer.getInstance().setCustomer(null);
-                        CurrentAccount.getInstance().setAccount(null);
+                        session.setCustomer(null);
+                        session.setAccount(null);
 //                        customer = null;
                         break main;
 

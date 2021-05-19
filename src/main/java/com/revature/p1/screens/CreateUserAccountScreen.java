@@ -6,6 +6,7 @@ import com.revature.p1.utilities.InputValidator;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 public class CreateUserAccountScreen extends Screen
 {
@@ -90,7 +91,7 @@ public class CreateUserAccountScreen extends Screen
             String zip = inputValidator.validate(readLine, "/zip");
             if (zip == null) return;
 
-            Customer newCustomer = new Customer(firstName, lastName, ssn, email, phone, username, password, unit, street, city, state, zip);
+            Customer newCustomer = new Customer(firstName, lastName, ssn, email, phone);
 
             //dao.addCustomer(newCustomer);
 
@@ -100,6 +101,12 @@ public class CreateUserAccountScreen extends Screen
 
         {
             System.out.println("Account creation failed");
+            e.printStackTrace();
+        } catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
 
