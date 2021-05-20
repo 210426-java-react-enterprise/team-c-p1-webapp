@@ -17,34 +17,52 @@ public abstract class Account
     protected double balance;
 
     @MyColumn(  name = "number",nullable = false,unique = true,type = ColumnType.VARCHAR,
-            length = 10,pk = false,fk = false,reference = "",delete = "cascade")
+            length = 10,pk = true, fk = false,reference = "",delete = "cascade")
     protected String number;
 
     @MyColumn(  name = "type",nullable = false,unique = false,type = ColumnType.VARCHAR,
             length = 10,pk = false,fk = false,reference = "",delete = "cascade")
     protected String type;
 
+    @MyColumn(name = "customer_ssn", type = ColumnType.VARCHAR, length = 9, nullable = false,unique = false,
+              pk = false, fk = true, reference = "project1.customer(ssn)", delete = "cascade")
+    protected String customerSsn;
 
     protected List<Transaction> transactions;
 
     protected Account(String number)
     {
         this.number = number;
-        balance = 0;
-        transactions = new ArrayList<>();
+        this.balance = 0;
+        this.customerSsn = "";
+        this.type = ColumnType.VARCHAR.name();
+        this.transactions = new ArrayList<>();
     }
     protected Account(String number, double balance)
     {
         this.number = number;
         this.balance = balance;
-        transactions = new ArrayList<>();
+        this.customerSsn = "";
+        this.type = ColumnType.VARCHAR.name();
+        this.transactions = new ArrayList<>();
     }
 
-    public Account(String number, double balance, List<Transaction> transactions)
+    protected Account(String number, double balance, List<Transaction> transactions)
     {
         this.balance = balance;
         this.number = number;
+        this.customerSsn = "";
+        this.type = ColumnType.VARCHAR.name();
         this.transactions = transactions;
+    }
+
+    protected Account(double balance, String number, String type, String customerSsn)
+    {
+        this.balance = balance;
+        this.number = number;
+        this.type = type;
+        this.customerSsn = customerSsn;
+        this.transactions = new ArrayList<>();
     }
 
     public double getBalance()

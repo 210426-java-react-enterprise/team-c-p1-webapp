@@ -47,7 +47,7 @@ public class Controller {
 
         this.connectionManager = new ConnectionManager();
         this.connection = this.connectionManager.getConnection();
-        this.session = new Session(null, null);
+        this.session = new Session(null, null, null, null);
         this.orm = new MyObjectRelationalMapper(connection);
         this.userService = new UserService(orm, null, session);
 

@@ -48,8 +48,8 @@ public class UserAccountLoginScreen extends Screen {
             Credential credential = ((Credential)orm.read(new Credential(username, "", "")));
             if(password.equals(credential.getPassword()))
             {
-                session.setCustomer((Customer) orm.read(new Customer(null, null, credential.getSsn(), null,
-                                                          null)));
+                session.setCustomer((Customer) orm.read(new Customer(null, null,
+                                                                     credential.getSsn(), null,null)));
                 screenManager.navigate("/customer account");
             } else
             {

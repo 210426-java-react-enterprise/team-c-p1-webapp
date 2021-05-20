@@ -146,11 +146,11 @@ public class UserAccountScreen extends Screen
                         switch (choice)
                         {
                             case 1:
-                                session.setAccount(account);
+                                session.setAccounts(account);
                                 screenManager.navigate("/deposit");
                                 break;
                             case 2:
-                                session.setAccount(account);
+                                session.setAccounts(account);
                                 screenManager.navigate("/withdraw");
                             case 3:
                                 break;
@@ -174,7 +174,7 @@ public class UserAccountScreen extends Screen
 
                     case 4:
                         session.setCustomer(null);
-                        session.setAccount(null);
+                        session.setAccounts(null);
 //                        customer = null;
                         break main;
 

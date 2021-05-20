@@ -16,21 +16,21 @@ public class BankingServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        dispatcher.dispatch(request, response);
         response.getWriter().println("<h1> Post - We are good! </h1>");
+        dispatcher.dispatch(request, response);
         Map<String,String[]> map = request.getParameterMap();
         for (String s : map.keySet())
         {
-            System.out.println(s + "\t:\t" + Arrays.toString(map.get(s)));
+            //System.out.println(s + "\t:\t" + Arrays.toString(map.get(s)));
         }
-        System.out.println("We are good!");
+        //System.out.println("We are good!");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.getWriter().println("<h1> Get - We are good! </h1>");
-        System.out.println(request.getRequestURI());
+        //System.out.println(request.getRequestURI());
 
     }
 }

@@ -46,7 +46,6 @@ public class DbConnectionPool implements ConnectionPool
         return instance;
     }
 
-
     @Override
     public Connection getConnection()
     {

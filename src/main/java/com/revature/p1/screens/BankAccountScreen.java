@@ -15,9 +15,9 @@ public class BankAccountScreen extends Screen{
     @Override
     public void render()
     {
-        System.out.println("\n" + session.getAccount() + "\n");
+        System.out.println("\n" + session.getAccounts() + "\n");
 
-        for (Transaction transaction : session.getAccount().getTransactions())
+        for (Transaction transaction : session.getAccounts().getTransactions())
         {
             System.out.println(transaction);
         }

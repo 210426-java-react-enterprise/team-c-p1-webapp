@@ -50,15 +50,30 @@ public class SchemaCreator
             StringBuilder sb = new StringBuilder();
             sb.append("CREATE TABLE IF NOT EXISTS ").append(clazz.getAnnotation(MyEntity.class).name()).append(" (");
             columns.forEach((column -> {
-                String type = switch (column.type())
-                        {
-                            case VARCHAR -> "VARCHAR(" + column.length() + ") ";
-                            case INT -> "INT";
-                            case SERIAL -> "SERIAL";
-                            case DECIMAL -> "DECIMAL";
-                            case TIME -> "TIME";
-                            case DATE -> "DATE";
-                        };
+                String type;
+                switch (column.type())
+                {
+                    case VARCHAR:
+                        type = "VARCHAR(" + column.length() + ") ";
+                        break;
+                    case INT:
+                        type = "INT";
+                        break;
+                    case SERIAL:
+                        type = "SERIAL";
+                        break;
+                    case DECIMAL:
+                        type = "DECIMAL";
+                        break;
+                    case TIME:
+                        type = "TIME";
+                        break;
+                    case DATE:
+                        type = "DATE";
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
                 sb.append(column.name()).append(" ").append(type).append(column.nullable() ? "" : " NOT NULL ")
                 .append(column.unique() ? "UNIQUE " : "").append(column.pk() ? "PRIMARY KEY " : "")
                 .append(column.fk() ? "REFERENCES " + column.reference() + " ON DELETE " + column.delete() : "").append(",");
@@ -67,6 +82,7 @@ public class SchemaCreator
             queries.add(sb.toString());
         });
         return queries;
+//        return null;
     }
 
 
