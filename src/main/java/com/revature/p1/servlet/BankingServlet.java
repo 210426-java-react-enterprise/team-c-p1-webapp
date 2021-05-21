@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class BankingServlet extends HttpServlet
 {
-    private Dispatcher dispatcher = new Dispatcher();
+    private final Dispatcher dispatcher = new Dispatcher();
 
 
     @Override
@@ -29,6 +29,7 @@ public class BankingServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.getWriter().println("<h1> Get - We are good! </h1>");
+        response.getWriter().println(request.getServerPort());
         //System.out.println(request.getRequestURI());
 
     }

@@ -10,12 +10,12 @@ public class Dispatcher
     {
         switch (request.getRequestURI())
         {
-            case "/p1_war/user":
-                response.getWriter().println("<h2> user.data! we are good! </h2>");
+            case "/user":
+                response.getWriter().println("<h2> user we are good! </h2>");
                 //System.out.println(request.getRequestURI());
                 break;
-            case "/p1_war/data":
-                response.getWriter().println("auth.data! we are good!");
+            case "/data":
+                response.getWriter().println("data we are good!");
                 //System.out.println(request.getRequestURI());
                 break;
         }
