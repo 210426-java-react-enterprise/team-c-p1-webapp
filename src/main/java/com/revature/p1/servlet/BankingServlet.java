@@ -22,6 +22,7 @@ public class BankingServlet extends HttpServlet
         for (String s : map.keySet())
         {
             response.getWriter().println(s + "\t:\t" + Arrays.toString(map.get(s)));
+
         }
         //System.out.println("We are good!");
     }
@@ -31,6 +32,7 @@ public class BankingServlet extends HttpServlet
     {
         response.getWriter().println("<h1> Get - We are good! </h1>");
         response.getWriter().println(request.getServerPort());
+
         //System.out.println(request.getRequestURI());
 
     }
