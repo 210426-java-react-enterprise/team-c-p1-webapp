@@ -26,6 +26,6 @@ public class ConnectionManager {
 
     public static boolean releaseConnection(Connection connection)
     {
-        return releaseConnection(connection);
+        return DbConnectionPool.getInstance().releaseConnection(connection);
     }
 }
