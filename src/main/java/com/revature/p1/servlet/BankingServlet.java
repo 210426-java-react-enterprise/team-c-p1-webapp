@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 public class BankingServlet extends HttpServlet
@@ -20,7 +21,7 @@ public class BankingServlet extends HttpServlet
         Map<String,String[]> map = request.getParameterMap();
         for (String s : map.keySet())
         {
-            //System.out.println(s + "\t:\t" + Arrays.toString(map.get(s)));
+            response.getWriter().println(s + "\t:\t" + Arrays.toString(map.get(s)));
         }
         //System.out.println("We are good!");
     }
