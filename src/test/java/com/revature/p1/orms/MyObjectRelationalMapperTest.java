@@ -35,7 +35,7 @@ public class MyObjectRelationalMapperTest
     public void OrmRead_test() throws SQLException, ExecutionException, InterruptedException
     {
         MySavable savable = new Credential("seantaba", "", "");
-        Credential returnedSavable = (Credential) orm.read(savable);
+        Credential returnedSavable = (Credential) orm.readRow(savable);
 
         Assert.assertEquals(returnedSavable.getPassword(), "password");
         Assert.assertEquals(returnedSavable.getSsn(), "999999999");

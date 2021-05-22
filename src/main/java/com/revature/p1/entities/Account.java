@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @MyEntity(name = "account")
-public abstract class Account
+public class Account extends MySavable
 {
     @MyColumn(  name = "balance",nullable = false,unique = false,type = ColumnType.DECIMAL,
                 length = 0,pk = false,fk = false,reference = "",delete = "cascade")
@@ -30,12 +30,13 @@ public abstract class Account
 
     protected List<Transaction> transactions;
 
-    protected Account(String number)
+
+    public Account(String ssn)
     {
-        this.number = number;
-        this.balance = 0;
-        this.customerSsn = "";
-        this.type = ColumnType.VARCHAR.name();
+        this.number = "";
+        this.balance = 0.0;
+        this.customerSsn = ssn;
+        this.type = "";
         this.transactions = new ArrayList<>();
     }
     protected Account(String number, double balance)
@@ -43,7 +44,7 @@ public abstract class Account
         this.number = number;
         this.balance = balance;
         this.customerSsn = "";
-        this.type = ColumnType.VARCHAR.name();
+        this.type = "";
         this.transactions = new ArrayList<>();
     }
 
@@ -52,7 +53,7 @@ public abstract class Account
         this.balance = balance;
         this.number = number;
         this.customerSsn = "";
-        this.type = ColumnType.VARCHAR.name();
+        this.type = "";
         this.transactions = transactions;
     }
 
@@ -63,6 +64,40 @@ public abstract class Account
         this.type = type;
         this.customerSsn = customerSsn;
         this.transactions = new ArrayList<>();
+    }
+
+    public Account(MySavable savable)
+    {
+        this.balance = ((Account) savable).balance;
+        this.customerSsn = ((Account) savable).customerSsn;
+        this.number = ((Account) savable).number;
+        this.transactions = ((Account) savable).transactions;
+        this.type = ((Account) savable).type;
+    }
+
+    public void setBalance(double balance)
+    {
+        this.balance = balance;
+    }
+
+    public void setNumber(String number)
+    {
+        this.number = number;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setCustomerSsn(String customerSsn)
+    {
+        this.customerSsn = customerSsn;
     }
 
     public double getBalance()
@@ -87,6 +122,6 @@ public abstract class Account
             balance = transactions.get(transactions.size()- 1).getBalance();
         }
     }
-    public abstract double deposit(double amount);
-    public abstract double withdraw(double amount);
+    public double deposit(double amount){return 0;};
+    public double withdraw(double amount){return 0;};
 }

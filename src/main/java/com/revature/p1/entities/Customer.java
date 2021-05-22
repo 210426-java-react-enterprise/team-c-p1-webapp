@@ -33,7 +33,7 @@ public class Customer extends MySavable
     private String phone;
 
 
-    private List<Account> accounts;
+    private List<? extends MySavable> accounts;
 
     public String getFirstName() {
         return firstName;
@@ -72,9 +72,14 @@ public class Customer extends MySavable
     }
 
 
-    public List<Account> getAccounts()
+    public List<? extends MySavable> getAccounts()
     {
         return accounts;
+    }
+
+    public void setAccounts(List<? extends MySavable> accounts)
+    {
+        this.accounts = accounts;
     }
 
     public Customer(String firstName, String lastName, String ssn, String email, String phone)
@@ -84,8 +89,16 @@ public class Customer extends MySavable
         this.ssn = ssn;
         this.email = email;
         this.phone = phone;
-
-        accounts = new ArrayList<>();
+        this.accounts = new ArrayList<>();
+    }
+    public Customer(MySavable savable)
+    {
+        this.email = ((Customer) savable).email;
+        this.firstName = ((Customer) savable).firstName;
+        this.lastName = ((Customer) savable).lastName;
+        this.phone = ((Customer) savable).phone;
+        this.accounts = ((Customer) savable).accounts;
+        this.ssn = ((Customer) savable).ssn;
     }
 
     public Customer()

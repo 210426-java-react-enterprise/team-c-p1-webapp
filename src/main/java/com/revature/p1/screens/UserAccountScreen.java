@@ -42,11 +42,11 @@ public class UserAccountScreen extends Screen
                 return null;
 
             Account account = null;
-            for (Account acc : session.getCustomer().getAccounts())
+            for (MySavable acc : session.getCustomer().getAccounts())
             {
-                if (acc.getNumber().equals(input))
+                if (((Account)acc).getNumber().equals(input))
                 {
-                    account = acc;
+                    account = (Account) acc;
                     return account;
                 }
             }
@@ -102,26 +102,26 @@ public class UserAccountScreen extends Screen
                         System.out.print("\nchoice: ");
                         input = scanner.nextLine();
                         choice = inputValidator.validate(input, 1, 3);
-//                        try
-//                        {
-//                            String newAccountNumber = "";
-//                            switch (choice)
-//                            {
-//                                case 1:
-//                                    newAccountNumber = dao.addAccount("checking");
-//                                    break;
-//                                case 2:
-//                                    newAccountNumber = dao.addAccount("savings");
-//                                    break;
-//                                case 3:
-//                                    newAccountNumber = dao.addAccount("trust");
-//                            }
-//                            if (newAccountNumber != null)
-//                                System.out.println("\nAccount was created successfully. Your new account number is " + newAccountNumber);
-//                        } catch (SQLException e)
-//                        {
-//                            e.printStackTrace();
-//                        }
+                        try
+                        {
+                            String newAccountNumber = "";
+                            switch (choice)
+                            {
+                                case 1:
+                                    newAccountNumber = dao.addAccount("checking");
+                                    break;
+                                case 2:
+                                    newAccountNumber = dao.addAccount("savings");
+                                    break;
+                                case 3:
+                                    newAccountNumber = dao.addAccount("trust");
+                            }
+                            if (newAccountNumber != null)
+                                System.out.println("\nAccount was created successfully. Your new account number is " + newAccountNumber);
+                        } catch (SQLException e)
+                        {
+                            e.printStackTrace();
+                        }
                         break;
                     case 2:
                         if (session.getCustomer().getAccounts().size() == 0)
@@ -146,11 +146,11 @@ public class UserAccountScreen extends Screen
                         switch (choice)
                         {
                             case 1:
-                                session.setAccounts(account);
+                                session.setAccount(account);
                                 screenManager.navigate("/deposit");
                                 break;
                             case 2:
-                                session.setAccounts(account);
+                                session.setAccount(account);
                                 screenManager.navigate("/withdraw");
                             case 3:
                                 break;
@@ -174,7 +174,7 @@ public class UserAccountScreen extends Screen
 
                     case 4:
                         session.setCustomer(null);
-                        session.setAccounts(null);
+                        session.setAccount(null);
 //                        customer = null;
                         break main;
 

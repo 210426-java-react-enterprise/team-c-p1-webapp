@@ -7,16 +7,17 @@ import com.revature.p1.entities.Transaction;
 import com.revature.p1.persistance.ConnectionManager;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class Session
 {
     private Customer customer;
-    private Account accounts;
     private Transaction transactions;
     private Credential credentials;
+    private Account account;
     Connection connection;
 
-    public Session(Customer customer, Account accounts, Transaction transactions, Credential credentials)
+    public Session(Customer customer, Transaction transactions, Credential credentials, Account account)
     {
         connection = ConnectionManager.getConnection();
         if (transactions != null)
@@ -25,8 +26,18 @@ public class Session
             this.credentials = credentials;
         if (customer != null)
             this.customer = customer;
-        if (accounts != null)
-            this.accounts = accounts;
+        if (account != null)
+            this.account = account;
+    }
+
+    public Account getAccount()
+    {
+        return account;
+    }
+
+    public void setAccount(Account account)
+    {
+        this.account = account;
     }
 
     public Customer getCustomer()
@@ -39,15 +50,6 @@ public class Session
         this.customer = customer;
     }
 
-    public Account getAccounts()
-    {
-        return accounts;
-    }
-
-    public void setAccounts(Account accounts)
-    {
-        this.accounts = accounts;
-    }
 
     public Transaction getTransactions()
     {

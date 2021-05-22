@@ -27,6 +27,13 @@ public class Credential extends MySavable
         this.ssn = ssn;
     }
 
+    public Credential(MySavable savable)
+    {
+        this.username = ((Credential)savable).username;
+        this.password = ((Credential)savable).password;
+        this.ssn = ((Credential)savable).ssn;
+    }
+
     public String getUsername()
     {
         return username;

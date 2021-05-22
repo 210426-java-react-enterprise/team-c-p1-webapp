@@ -34,7 +34,7 @@ public class DepositScreen extends Screen
             if (inputValidator.validate(input, "/deposit") == null)
                 return;
             String identifier = "";
-           session.getAccounts().deposit(Double.parseDouble(input));
+           session.getAccount().deposit(Double.parseDouble(input));
 
             //dao.updateAccount(CurrentAccount.getInstance().getAccount());
 

@@ -4,7 +4,6 @@ package com.revature.p1.utilities;
     This class is responsible for user input validation.
  */
 
-import com.revature.p1.entities.Account;
 import com.revature.p1.entities.Credential;
 import com.revature.p1.orms.MyObjectRelationalMapper;
 
@@ -63,7 +62,7 @@ public class InputValidator {
                     System.out.println("Only letters and numbers are allowed.");
                     return null;
                 }
-                if(identifier.equals("/username") && !((Credential)orm.read(new Credential(input, "", ""))).getPassword().equals(""))
+                if(identifier.equals("/username") && !((Credential)orm.readRow(new Credential(input, "", ""))).getPassword().equals(""))
                 {
                     System.out.println("username entered has already been taken. Use a different username.");
                     return null;

@@ -1,21 +1,23 @@
 package com.revature.p1.screens;
 
-import com.revature.p1.entities.Credential;
-import com.revature.p1.entities.Customer;
+import com.revature.p1.entities.*;
 import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
 import com.revature.p1.utilities.ScreenManager;
 import com.revature.p1.utilities.datasource.Session;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserAccountLoginScreen extends Screen {
 
-    private Scanner scanner;
-    private InputValidator inputValidator;
-    private ScreenManager screenManager;
-    private MyObjectRelationalMapper orm;
-    private Session session;
+    private final Scanner scanner;
+    private final InputValidator inputValidator;
+    private final ScreenManager screenManager;
+    private final MyObjectRelationalMapper orm;
+    private final Session session;
 
     public UserAccountLoginScreen(  Scanner scanner, InputValidator inputValidator, ScreenManager screenManager,
                                     MyObjectRelationalMapper orm, Session session)
@@ -45,11 +47,32 @@ public class UserAccountLoginScreen extends Screen {
             String password = inputValidator.validate(input, "/password");
             if (password == null)
                 return;
-            Credential credential = ((Credential)orm.read(new Credential(username, "", "")));
+            Credential credential = ((Credential)orm.readRow(new Credential(username, "", "")));
             if(password.equals(credential.getPassword()))
             {
-                session.setCustomer((Customer) orm.read(new Customer(null, null,
-                                                                     credential.getSsn(), null,null)));
+                session.setCustomer((Customer) orm.readRow(new Customer(null, null,
+                                                                        credential.getSsn(), null, null)));
+                session.setCredentials(credential);
+                List<MySavable> savables = orm.readRows(new Account(credential.getSsn()));
+                List<Account> accounts = new ArrayList<>();
+                savables.forEach(savable -> accounts.add((Account) savable));
+                List<Account> customerAccounts = new ArrayList<>();
+                accounts.forEach((account -> {
+                    switch (account.getType())
+                    {
+                        case "checking":
+                            customerAccounts.add(new CheckingAccount(account));
+                            break;
+                        case "savings":
+                            customerAccounts.add(new SavingsAccount(account));
+                            break;
+                        case "trust":
+                            customerAccounts.add(new TrustAccount(account));
+                    }
+                }));
+                session.getCustomer().setAccounts(customerAccounts);
+
+
                 screenManager.navigate("/customer account");
             } else
             {

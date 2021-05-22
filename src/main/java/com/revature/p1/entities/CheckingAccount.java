@@ -1,8 +1,5 @@
 package com.revature.p1.entities;
 
-
-import com.revature.p1.exceptions.IllegalInputException;
-
 import java.util.List;
 
 public class CheckingAccount extends Account{
@@ -49,5 +46,15 @@ public class CheckingAccount extends Account{
         transactions.add(new Transaction("withdraw", amount, balance,number));
         System.out.println("Withdrawal successful.");
         return balance;
+    }
+
+    public CheckingAccount(Account account)
+    {
+        super(account.customerSsn);
+        this.balance = account.balance;
+        this.customerSsn = account.customerSsn;
+        this.number = account.number;
+        this.type = account.type;
+        this.transactions = account.transactions;
     }
 }

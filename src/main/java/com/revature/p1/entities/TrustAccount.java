@@ -44,4 +44,13 @@ public class TrustAccount extends Account
         transactions.add(new Transaction("withdraw", amount, balance, number));
         return balance;
     }
+    public TrustAccount(Account account)
+    {
+        super(account.customerSsn);
+        this.balance = account.balance;
+        this.customerSsn = account.customerSsn;
+        this.number = account.number;
+        this.type = account.type;
+        this.transactions = account.transactions;
+    }
 }
