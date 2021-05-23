@@ -10,21 +10,21 @@ public class Transaction extends MySavable
 {
     @MyColumn(  name = "type",nullable = false,unique = false,type = ColumnType.VARCHAR,length = 10,pk = false,
                 fk = false,reference = "",delete = "cascade")
-    private final String type;
+    private String type;
 
     @MyColumn(  name = "amount",nullable = false,unique = false,type = ColumnType.DECIMAL,length = 0,pk = false,
                 fk = false,reference = "",delete = "cascade")
-    private final double amount;
+    private double amount;
 
     @MyColumn(  name = "balance",nullable = false,unique = false,type = ColumnType.DECIMAL,length = 0,pk = false,
             fk = false,reference = "",delete = "cascade")
-    private final double balance;
+    private double balance;
 
-    @MyColumn(  name = "account_number",nullable = false,unique = false,type = ColumnType.VARCHAR,length = 10,pk = false,
+    @MyColumn(  name = "account_number",nullable = false,unique = false,type = ColumnType.INT,length = 10,pk = false,
             fk = true,reference = "account(number)",delete = "cascade")
-    private final String accountNumber;
+    private int accountNumber;
 
-    public Transaction(String type, double amount, double balance, String accountNumber)
+    public Transaction(String type, double amount, double balance, int accountNumber)
     {
         this.type = type;
         this.amount = amount;
@@ -32,7 +32,35 @@ public class Transaction extends MySavable
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountNumber()
+    public Transaction(MySavable savable)
+    {
+        this.type = ((Transaction) savable).type;
+        this.amount = ((Transaction) savable).amount;
+        this.balance = ((Transaction) savable).balance;
+        this.accountNumber = ((Transaction) savable).accountNumber;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public void setAmount(double amount)
+    {
+        this.amount = amount;
+    }
+
+    public void setBalance(double balance)
+    {
+        this.balance = balance;
+    }
+
+    public void setAccountNumber(int accountNumber)
+    {
+        this.accountNumber = accountNumber;
+    }
+
+    public int getAccountNumber()
     {
         return accountNumber;
     }
@@ -59,6 +87,7 @@ public class Transaction extends MySavable
                 "type = '" + type + '\'' +
                 ", amount = $" + amount +
                 ", balance = $" + balance +
+                       ", number = $" + accountNumber +
                 '}';
     }
 }

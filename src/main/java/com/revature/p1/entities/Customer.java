@@ -34,6 +34,7 @@ public class Customer extends MySavable
 
 
     private List<? extends MySavable> accounts;
+    private Credential credential;
 
     public String getFirstName() {
         return firstName;
@@ -82,13 +83,24 @@ public class Customer extends MySavable
         this.accounts = accounts;
     }
 
-    public Customer(String firstName, String lastName, String ssn, String email, String phone)
+    public Credential getCredential()
+    {
+        return credential;
+    }
+
+    public void setCredential(Credential credential)
+    {
+        this.credential = credential;
+    }
+
+    public Customer(String firstName, String lastName, String ssn, String email, String phone, Credential credential)
     {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
         this.email = email;
         this.phone = phone;
+        this.credential = credential;
         this.accounts = new ArrayList<>();
     }
     public Customer(MySavable savable)
@@ -99,6 +111,7 @@ public class Customer extends MySavable
         this.phone = ((Customer) savable).phone;
         this.accounts = ((Customer) savable).accounts;
         this.ssn = ((Customer) savable).ssn;
+        this.credential = ((Customer) savable).credential;
     }
 
     public Customer()

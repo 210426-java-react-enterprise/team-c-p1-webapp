@@ -1,23 +1,32 @@
 package com.revature.p1.entities;
 
+import com.revature.p1.annotations.ColumnType;
+import com.revature.p1.annotations.MyColumn;
+import com.revature.p1.annotations.MyEntity;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@MyEntity(name = "account")
 public class CheckingAccount extends Account{
 
-    public CheckingAccount(String number)
-    {
-        super(number);
-    }
+    @MyColumn(name = "balance", nullable = false, unique = false, type = ColumnType.DECIMAL,
+              length = 0, pk = false, fk = false, reference = "", delete = "cascade")
+    private double balance;
 
-    public CheckingAccount(String number, double balance)
-    {
-        super(number, balance);
-    }
+    @MyColumn(  name = "number",nullable = false,unique = true,type = ColumnType.SERIAL,
+                length = 10,pk = true, fk = false,reference = "",delete = "cascade")
+    private int number;
 
-    public CheckingAccount(String number, double balance, List<Transaction> transactions)
-    {
-        super(number, balance, transactions);
-    }
+    @MyColumn(  name = "type",nullable = false,unique = false,type = ColumnType.VARCHAR,
+                length = 10,pk = false,fk = false,reference = "",delete = "cascade")
+    private String type;
+
+    @MyColumn(name = "customer_ssn", type = ColumnType.VARCHAR, length = 9, nullable = false,unique = false,
+              pk = false, fk = true, reference = "project1.customer(ssn)", delete = "cascade")
+    private String customerSsn;
+
+    private List<Transaction> transactions;
 
     @Override
     public String toString()
@@ -50,11 +59,79 @@ public class CheckingAccount extends Account{
 
     public CheckingAccount(Account account)
     {
-        super(account.customerSsn);
-        this.balance = account.balance;
-        this.customerSsn = account.customerSsn;
-        this.number = account.number;
-        this.type = account.type;
-        this.transactions = account.transactions;
+        super(account.getCustomerSsn());
+        this.balance = account.getBalance();
+        this.customerSsn = account.getCustomerSsn();
+        this.number = account.getNumber();
+        this.type = account.getType();
+        this.transactions = new ArrayList<>();
+        transactions.addAll(account.transactions);
+    }
+
+    public CheckingAccount(String ssn)
+    {
+        this.customerSsn = ssn;
+        this.type = "checking";
+        this.transactions = new ArrayList<>();
+    }
+
+    @Override
+    public List<Transaction> getTransactions()
+    {
+        return new ArrayList<>(transactions);
+    }
+
+    @Override
+    public void setTransactions(List<Transaction> transactions)
+    {
+        this.transactions.addAll(transactions);
+    }
+
+    @Override
+    public double getBalance()
+    {
+        return balance;
+    }
+
+    @Override
+    public void setBalance(double balance)
+    {
+        this.balance = balance;
+    }
+
+    @Override
+    public int getNumber()
+    {
+        return number;
+    }
+
+    @Override
+    public void setNumber(int number)
+    {
+        this.number = number;
+    }
+
+    @Override
+    public String getType()
+    {
+        return type;
+    }
+
+    @Override
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    @Override
+    public String getCustomerSsn()
+    {
+        return customerSsn;
+    }
+
+    @Override
+    public void setCustomerSsn(String customerSsn)
+    {
+        this.customerSsn = customerSsn;
     }
 }

@@ -2,21 +2,21 @@ package com.revature.p1.screens;
 
 import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
+import com.revature.p1.utilities.datasource.Session;
 
-import java.sql.SQLException;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
 
 public class WithdrawalScreen extends Screen
 {
     private Scanner scanner;
     private InputValidator inputValidator;
     private MyObjectRelationalMapper orm;
+    private Session session;
 
-    public WithdrawalScreen(Scanner scanner, InputValidator inputValidator, MyObjectRelationalMapper orm)
+    public WithdrawalScreen(Scanner scanner, InputValidator inputValidator, MyObjectRelationalMapper orm, Session session)
     {
         super("/withdraw");
-
+        this.session = session;
         this.scanner = scanner;
         this.inputValidator = inputValidator;
         this.orm = orm;
@@ -27,24 +27,11 @@ public class WithdrawalScreen extends Screen
     {
         System.out.print("Enter amount to withdraw: ");
         String input = scanner.nextLine();
-        try
-        {
-            if (inputValidator.validate(input, "/withdraw") == null)
-                return;
+        if (inputValidator.validate(input, "/deposit") == null)
+            return;
 
-//            if(CurrentAccount.getInstance().getAccount().withdraw(Double.parseDouble(input)) != -1)
-//                dao.updateAccount(CurrentAccount.getInstance().getAccount());
-
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        } catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-
+        session.getAccount().withdraw(Double.parseDouble(input));
+        orm.updateData(session.getAccount());
+        orm.saveNewData(session.getAccount().getTransactions().get(session.getAccount().getTransactions().size() - 1));
     }
 }

@@ -14,32 +14,35 @@ public class Account extends MySavable
 {
     @MyColumn(  name = "balance",nullable = false,unique = false,type = ColumnType.DECIMAL,
                 length = 0,pk = false,fk = false,reference = "",delete = "cascade")
-    protected double balance;
+    private double balance;
 
-    @MyColumn(  name = "number",nullable = false,unique = true,type = ColumnType.VARCHAR,
+    @MyColumn(  name = "number",nullable = false,unique = true,type = ColumnType.SERIAL,
             length = 10,pk = true, fk = false,reference = "",delete = "cascade")
-    protected String number;
+    private int number;
 
     @MyColumn(  name = "type",nullable = false,unique = false,type = ColumnType.VARCHAR,
             length = 10,pk = false,fk = false,reference = "",delete = "cascade")
-    protected String type;
+    private String type;
 
     @MyColumn(name = "customer_ssn", type = ColumnType.VARCHAR, length = 9, nullable = false,unique = false,
               pk = false, fk = true, reference = "project1.customer(ssn)", delete = "cascade")
-    protected String customerSsn;
+    private String customerSsn;
 
     protected List<Transaction> transactions;
 
+    public Account()
+    {
+    }
 
     public Account(String ssn)
     {
-        this.number = "";
-        this.balance = 0.0;
+        this.number = 0;
+        this.balance = 0;
         this.customerSsn = ssn;
         this.type = "";
         this.transactions = new ArrayList<>();
     }
-    protected Account(String number, double balance)
+    protected Account(int number, double balance)
     {
         this.number = number;
         this.balance = balance;
@@ -48,16 +51,16 @@ public class Account extends MySavable
         this.transactions = new ArrayList<>();
     }
 
-    protected Account(String number, double balance, List<Transaction> transactions)
+    protected Account(int number, double balance, List<Transaction> transactions)
     {
         this.balance = balance;
         this.number = number;
         this.customerSsn = "";
         this.type = "";
-        this.transactions = transactions;
+        this.transactions.addAll(transactions);
     }
 
-    protected Account(double balance, String number, String type, String customerSsn)
+    protected Account(double balance, int number, String type, String customerSsn)
     {
         this.balance = balance;
         this.number = number;
@@ -71,8 +74,14 @@ public class Account extends MySavable
         this.balance = ((Account) savable).balance;
         this.customerSsn = ((Account) savable).customerSsn;
         this.number = ((Account) savable).number;
-        this.transactions = ((Account) savable).transactions;
+        this.transactions = new ArrayList<>();
+        this.transactions.addAll(((Account) savable).transactions);
         this.type = ((Account) savable).type;
+    }
+
+    public void setTransactions(List<Transaction> transactions)
+    {
+        this.transactions.addAll(transactions);
     }
 
     public void setBalance(double balance)
@@ -80,7 +89,7 @@ public class Account extends MySavable
         this.balance = balance;
     }
 
-    public void setNumber(String number)
+    public void setNumber(int number)
     {
         this.number = number;
     }
@@ -95,6 +104,11 @@ public class Account extends MySavable
         return type;
     }
 
+    public String getCustomerSsn()
+    {
+        return customerSsn;
+    }
+
     public void setCustomerSsn(String customerSsn)
     {
         this.customerSsn = customerSsn;
@@ -105,7 +119,7 @@ public class Account extends MySavable
         return balance;
     }
 
-    public String getNumber()
+    public int getNumber()
     {
         return number;
     }

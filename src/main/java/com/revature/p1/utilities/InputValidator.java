@@ -7,10 +7,6 @@ package com.revature.p1.utilities;
 import com.revature.p1.entities.Credential;
 import com.revature.p1.orms.MyObjectRelationalMapper;
 
-
-import java.sql.SQLException;
-import java.util.concurrent.ExecutionException;
-
 public class InputValidator {
 
     private final MyObjectRelationalMapper orm;
@@ -44,7 +40,7 @@ public class InputValidator {
     /*
     This method checks user inputs for correctness - correct format, characters and so on.
      */
-    public String validate(String input, String identifier) throws SQLException, ExecutionException, InterruptedException
+    public String validate(String input, String identifier)
     {
         if (input == null || identifier == null) return null;
         input = input.trim();
@@ -67,11 +63,7 @@ public class InputValidator {
                     System.out.println("username entered has already been taken. Use a different username.");
                     return null;
                 }
-//                if (identifier.equals("/isUsername") && !dao.tryNewUsername(input))
-//                {
-//                    System.out.println("username does not exist. Please try again.");
-//                    return null;
-//                }
+//
                 return input;
 
             case "/password":
@@ -135,10 +127,10 @@ public class InputValidator {
                 return input;
 
             case "/unit":
-                if (!isCorrectLength(input, 1, 3))
+                if (!isCorrectLength(input, 0, 3))
                 {
                     System.out.println("Unit number length must be 1-3 digits.");
-                    return null;
+                    return input.substring(0,2);
                 }
                 if (!input.equals("") && !input.chars().allMatch(Character::isDigit))
                 {
@@ -205,12 +197,8 @@ public class InputValidator {
                     System.out.println("Incorrect account number. Please try again.");
                     return null;
                 }
-//                for (Account account : CurrentCustomer.getInstance().getCustomer().getAccounts())
-//                {
-//                    if (account.getNumber().equals(input)) return input;
-//                }
-                System.out.println("\nThis customer does not own the account entered. Please try again.");
-                return null;
+//
+                return input;
 
             case "/withdraw":
             case "/deposit":

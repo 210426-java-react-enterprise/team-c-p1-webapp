@@ -1,10 +1,5 @@
 package com.revature.p1.persistance;
 
-import com.revature.p1.entities.*;
-import com.revature.p1.exceptions.IllegalInputException;
-
-import java.sql.*;
-
 public class oldDao
 {
 //    private final Connection connection;

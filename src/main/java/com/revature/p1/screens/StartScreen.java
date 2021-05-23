@@ -48,7 +48,7 @@ public class StartScreen extends Screen {
             }
 
         } catch (Exception e) {
-            System.err.println("\n*** You have entered an illegal character. Please enter 1,2 or 3 ***\n");
+            e.printStackTrace();
         }
 
 

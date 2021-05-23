@@ -4,9 +4,7 @@ import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
 import com.revature.p1.utilities.datasource.Session;
 
-import java.sql.SQLException;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
 
 public class DepositScreen extends Screen
 {
@@ -29,24 +27,11 @@ public class DepositScreen extends Screen
     {
         System.out.print("Enter amount to deposit: ");
         String input = scanner.nextLine();
-        try
-        {
-            if (inputValidator.validate(input, "/deposit") == null)
-                return;
-            String identifier = "";
-           session.getAccount().deposit(Double.parseDouble(input));
+        if (inputValidator.validate(input, "/deposit") == null)
+            return;
 
-            //dao.updateAccount(CurrentAccount.getInstance().getAccount());
-
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        } catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+        session.getAccount().deposit(Double.parseDouble(input));
+        orm.updateData(session.getAccount());
+        orm.saveNewData(session.getAccount().getTransactions().get(session.getAccount().getTransactions().size() - 1));
     }
 }

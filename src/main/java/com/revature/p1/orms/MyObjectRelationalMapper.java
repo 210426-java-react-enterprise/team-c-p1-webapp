@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MyObjectRelationalMapper
@@ -26,7 +27,7 @@ public class MyObjectRelationalMapper
         this.connection = connection;
     }
 
-    public MySavable readRow(MySavable savable) throws SQLException
+    public MySavable readRow(MySavable savable)
     {
         StringBuilder sb = new StringBuilder();
         try
@@ -43,7 +44,7 @@ public class MyObjectRelationalMapper
                                                              field.getAnnotation(MyColumn.class)
                                                                   .pk())
                                     .filter(field ->
-                                                {
+                                            {
                                                 field.setAccessible(true);
                                                 try
                                                 {
@@ -53,7 +54,7 @@ public class MyObjectRelationalMapper
                                                     e.printStackTrace();
                                                 }
                                                 return false;
-                                                })
+                                            })
                                     .collect(Collectors.toList());
             if (pks.size() == 0) return savable;
             sb.append("SELECT * FROM project1.")
@@ -78,43 +79,59 @@ public class MyObjectRelationalMapper
             e.printStackTrace();
         }
 
-        System.out.println(sb);
-        //((Credential)savable).setPassword(sb.toString());
+        ResultSet resultSet = null;
+        try
+        {
+            PreparedStatement statement = connection.prepareStatement(sb.toString());
+            resultSet = statement.executeQuery();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        List<MySavable> savables = buildSavables(savable, Objects.requireNonNull(resultSet));
 
-        PreparedStatement statement = connection.prepareStatement(sb.toString());
-        ResultSet resultSet = statement.executeQuery();
-
-        return buildSavables(savable, resultSet)
-                       .get(0);
+        if(savables.size() == 0) {
+            return savable;
+        } else return savables.get(0);
     }
 
-    public List<MySavable> readRows(MySavable savable) throws SQLException
+    public List<MySavable> readRows(MySavable savable)
     {
         StringBuilder sb = new StringBuilder();
-
-        if (!savable.getClass()
-                    .isAnnotationPresent(MyEntity.class))
+        try
         {
-            throw new NotSavableObjectException("Object is not a 'Savable' type!");
+            if (!savable.getClass()
+                        .isAnnotationPresent(MyEntity.class))
+            {
+                throw new NotSavableObjectException("Object is not a 'Savable' type!");
+            }
+        } catch (NotSavableObjectException e)
+        {
+            e.printStackTrace();
         }
-        List<Field> fields = new ArrayList<>(Arrays.asList(savable.getClass()
-                                                                  .getDeclaredFields()));
-        sb
-                .append("SELECT * FROM project1.")
-                .append(savable.getClass()
-                               .getAnnotation(MyEntity.class)
-                               .name())
-                .append(" WHERE ");
-        sb.append(Objects.requireNonNull(findCondition(savable, fields)));
+        sb.append("SELECT * FROM project1.")
+          .append(savable.getClass()
+                         .getAnnotation(MyEntity.class)
+                         .name())
+          .append(" WHERE ");
+        sb.append(Objects.requireNonNull(findCondition(savable)));
 
-        PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-        return buildSavables(savable, resultSet);
+        ResultSet resultSet = null;
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return buildSavables(savable, Objects.requireNonNull(resultSet));
     }
 
-    private String findCondition(MySavable savable, List<Field> fields)
+    private String findCondition(MySavable savable)
     {
+        List<Field> fields = new ArrayList<>(Arrays.asList(savable.getClass()
+                                                                  .getDeclaredFields()));
         for (Field field : fields)
         {
             if (field.isAnnotationPresent(MyColumn.class))
@@ -138,6 +155,16 @@ public class MyObjectRelationalMapper
                             break;
                         case INT:
                         case SERIAL:
+                            field.setAccessible(true);
+                            if ((int) field.get(savable) != 0)
+                            {
+                                String returnString = field.getAnnotation(MyColumn.class)
+                                                           .name() + "=" + field.get(savable);
+                                field.setAccessible(false);
+                                return returnString;
+                            }
+                            field.setAccessible(false);
+                            break;
                         case DECIMAL:
                             field.setAccessible(true);
                             if ((double) field.get(savable) != 0)
@@ -170,11 +197,11 @@ public class MyObjectRelationalMapper
                 List<Method> methods = new ArrayList<>(Arrays.asList(savable.getClass()
                                                                             .getDeclaredMethods()));
                 fields.forEach(field ->
-                                   {
+                               {
                                    if (field.isAnnotationPresent(MyColumn.class))
                                    {
                                        methods.forEach(method ->
-                                                           {
+                                                       {
                                                            if (method.getName()
                                                                      .toLowerCase(Locale.ROOT)
                                                                      .startsWith("set"))
@@ -186,7 +213,7 @@ public class MyObjectRelationalMapper
                                                                         .toLowerCase(Locale.ROOT)
                                                                         .equals(methodName))
                                                                {
-                                                                   System.out.println("field: " + field.getName() + "\tmethod: " + method.getName());
+                                                                   //System.out.println("field: " + field.getName() + "\tmethod: " + method.getName());
                                                                    try
                                                                    {
                                                                        switch (field.getAnnotation(MyColumn.class)
@@ -206,6 +233,7 @@ public class MyObjectRelationalMapper
                                                                                              resultSet.getInt(field.getAnnotation(MyColumn.class)
                                                                                                                    .name()));
                                                                                field.setAccessible(false);
+                                                                               break;
                                                                            case DECIMAL:
                                                                                field.setAccessible(true);
                                                                                method.invoke(savable,
@@ -223,95 +251,220 @@ public class MyObjectRelationalMapper
                                                                    }
                                                                }
                                                            }
-                                                           });
+                                                       });
                                    }
-                                   });
+                               });
                 Class<?> clazz = Class.forName(savable.getClass()
                                                       .getName());
                 Object newObject = clazz.getConstructor(MySavable.class)
                                         .newInstance(savable);
                 savables.add((MySavable) newObject);
             }
-        } catch (SQLException | NoSuchMethodException | IllegalAccessException | InstantiationException |
-                         InvocationTargetException | ClassNotFoundException e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
         return savables;
     }
 
-    public int saveData(List<MySavable> savables)
+    public int saveNewData(MySavable savable)
     {
-        int rowsAffected = 0;
+        AtomicInteger rowsAffected = new AtomicInteger();
         StringBuilder headBuilder = new StringBuilder();
         StringBuilder tailBuilder = new StringBuilder();
-        savables.forEach(object ->
-                             {
-                             if (!object.getClass()
-                                        .isAnnotationPresent(MyEntity.class))
-                             {
-                                 throw new NotSavableObjectException("Not a savable object!");
-                             }
-                             String tableName = object.getClass()
-                                                      .getAnnotation(MyEntity.class)
-                                                      .name();
-                             headBuilder.append("INSERT INTO project1.")
-                                        .append(tableName)
-                                        .append(" (");
-                             tailBuilder.append(" VALUES (");
-                             List<Field> fields = Arrays.asList(object.getClass()
-                                                                      .getDeclaredFields());
-                             fields.forEach(field ->
-                                                {
-                                                if (!field.isAnnotationPresent(MyColumn.class))
-                                                {
-                                                    throw new NotSavableObjectException("Object not properly annotated!");
-                                                }
-                                                String columnName = field.getAnnotation(MyColumn.class)
-                                                                         .name();
-                                                headBuilder.append(columnName)
-                                                           .append(",");
-                                                try
-                                                {
-                                                    switch (field.getAnnotation(MyColumn.class)
-                                                                 .type())
-                                                    {
-                                                        case VARCHAR:
-                                                            field.setAccessible(true);
-                                                            tailBuilder.append("'")
-                                                                       .append(field.get(object))
-                                                                       .append("'");
-                                                            field.setAccessible(false);
-                                                            break;
-                                                        case INT:
-                                                        case SERIAL:
-                                                        case DECIMAL:
-                                                            field.setAccessible(true);
-                                                            tailBuilder.append(field.get(object))
-                                                                       .append(",");
-                                                            field.setAccessible(false);
-                                                    }
-                                                } catch (Exception e)
-                                                {
-                                                    e.printStackTrace();
-                                                }
-                                                });
-                             headBuilder.deleteCharAt(headBuilder.length() - 1);
-                             tailBuilder.deleteCharAt(tailBuilder.length() - 1);
-                             headBuilder.append(")");
-                             tailBuilder.append(")");
-                             });
-        headBuilder.append(tailBuilder);
         try
         {
-            PreparedStatement preparedStatement = connection.prepareStatement(headBuilder.toString());
-            rowsAffected += preparedStatement.executeUpdate();
+            if (!savable.getClass()
+                        .isAnnotationPresent(MyEntity.class))
+            {
+                throw new NotSavableObjectException("Not a savable savable!");
+            }
+            String tableName = savable.getClass()
+                                      .getAnnotation(MyEntity.class)
+                                      .name();
+            headBuilder.append("INSERT INTO project1.")
+                       .append(tableName)
+                       .append(" (");
+            tailBuilder.append(" VALUES (");
+            List<Field> fields = new ArrayList<>(Arrays.asList(savable.getClass()
+                                                                      .getDeclaredFields()));
+            fields.forEach(field ->
+                           {
+                               if (field.isAnnotationPresent(MyColumn.class))
+                               {
 
-        } catch (SQLException e)
+
+                                   String columnName = field.getAnnotation(MyColumn.class)
+                                                            .name();
+                                   if (!field.getAnnotation(MyColumn.class)
+                                             .type()
+                                             .equals(ColumnType.SERIAL))
+                                   {
+                                       headBuilder.append(columnName)
+                                                  .append(",");
+                                   }
+                                   try
+                                   {
+                                       switch (field.getAnnotation(MyColumn.class)
+                                                    .type())
+                                       {
+                                           case VARCHAR:
+                                               field.setAccessible(true);
+                                               tailBuilder.append("'")
+                                                          .append(field.get(savable))
+                                                          .append("',");
+                                               field.setAccessible(false);
+                                               break;
+                                           case SERIAL:
+                                               break;
+                                           case INT:
+                                           case DECIMAL:
+                                               field.setAccessible(true);
+                                               tailBuilder.append(field.get(savable))
+                                                          .append(",");
+                                               field.setAccessible(false);
+                                               break;
+                                       }
+                                   } catch (Exception e)
+                                   {
+                                       e.printStackTrace();
+                                   }
+                               }
+                           });
+            headBuilder.deleteCharAt(headBuilder.length() - 1);
+            tailBuilder.deleteCharAt(tailBuilder.length() - 1);
+            headBuilder.append(")");
+            tailBuilder.append(")");
+
+            headBuilder.append(tailBuilder);
+            try
+            {
+                PreparedStatement preparedStatement = connection.prepareStatement(headBuilder.toString());
+                rowsAffected.addAndGet(preparedStatement.executeUpdate());
+
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+                return -1;
+            }
+            headBuilder.setLength(0);
+            tailBuilder.setLength(0);
+
+
+        } catch (NotSavableObjectException e)
         {
             e.printStackTrace();
         }
-        return rowsAffected;
+        return rowsAffected.get();
+    }
+
+    public void updateData(MySavable savable)
+    {
+        StringBuilder headBuilder = new StringBuilder();
+        StringBuilder conditionBuilder = new StringBuilder();
+
+        try
+        {
+            if (!savable.getClass()
+                        .isAnnotationPresent(MyEntity.class))
+            {
+                throw new NotSavableObjectException("Not a savable savable!");
+            }
+            String tableName = savable.getClass()
+                                      .getAnnotation(MyEntity.class)
+                                      .name();
+            headBuilder.append("UPDATE project1.")
+                       .append(tableName)
+                       .append(" SET ");
+
+            List<Field> fields = new ArrayList<>(Arrays.asList(savable.getClass()
+                                                                      .getDeclaredFields()));
+            fields.forEach(field ->
+                           {
+                               try
+                               {
+                                   if (field.isAnnotationPresent(MyColumn.class))
+                                   {
+                                       if (field.getAnnotation(MyColumn.class)
+                                                .pk())
+                                       {
+                                           field.setAccessible(true);
+                                           conditionBuilder.append(" WHERE ")
+                                                           .append(field.getAnnotation(MyColumn.class)
+                                                                        .name())
+                                                           .append("=")
+                                                           .append(field.getAnnotation(MyColumn.class)
+                                                                        .type()
+                                                                        .equals(ColumnType.VARCHAR) ? "'" : "")
+                                                           .append(field.get(savable))
+                                                           .append(field.getAnnotation(MyColumn.class)
+                                                                        .type()
+                                                                        .equals(ColumnType.VARCHAR) ? "'" : "");
+                                           field.setAccessible(false);
+                                       }
+                                       if (field.getAnnotation(MyColumn.class)
+                                                .type()
+                                                .equals(ColumnType.SERIAL) || field.getAnnotation(MyColumn.class)
+                                                                                   .pk() ||
+                                                   field.getAnnotation(MyColumn.class)
+                                                        .fk() || field.getAnnotation(MyColumn.class)
+                                                                      .unique())
+                                       {
+                                           //System.out.println("Condition was built");
+                                       }
+                                       else
+                                       {
+
+                                           String columnName = field.getAnnotation(MyColumn.class)
+                                                                    .name();
+                                           headBuilder.append(columnName)
+                                                      .append("=");
+
+                                           switch (field.getAnnotation(MyColumn.class)
+                                                        .type())
+                                           {
+                                               case VARCHAR:
+                                                   field.setAccessible(true);
+                                                   headBuilder.append("'")
+                                                              .append(field.get(savable))
+                                                              .append("',");
+                                                   field.setAccessible(false);
+                                                   break;
+                                               case INT:
+                                               case DECIMAL:
+                                                   field.setAccessible(true);
+                                                   headBuilder.append(field.get(savable))
+                                                              .append(",");
+                                                   field.setAccessible(false);
+                                                   break;
+                                           }
+                                       }
+                                   }
+                               } catch (Exception e)
+                               {
+                                   e.printStackTrace();
+                               }
+                           });
+
+            headBuilder.deleteCharAt(headBuilder.length() - 1);
+            headBuilder.append(conditionBuilder);
+
+            try
+            {
+                PreparedStatement preparedStatement = connection.prepareStatement(headBuilder.toString());
+                preparedStatement.executeUpdate();
+
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+                return;
+            }
+            headBuilder.setLength(0);
+
+        } catch (NotSavableObjectException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
 

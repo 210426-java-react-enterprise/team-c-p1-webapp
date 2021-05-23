@@ -1,7 +1,5 @@
 package com.revature.p1.screens;
 
-import com.revature.p1.exceptions.IllegalInputException;
-
 public abstract class Screen {
 
         private final String identifier;
@@ -12,7 +10,7 @@ public abstract class Screen {
             this.identifier = identifier;
         }
 
-        public abstract void render() throws IllegalInputException;
+        public abstract void render();
 
         public String getIdentifier()
         {

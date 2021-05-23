@@ -1,6 +1,5 @@
 package com.revature.p1.utilities;
 
-import com.revature.p1.exceptions.IllegalInputException;
 import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.persistance.ConnectionManager;
 import com.revature.p1.screens.*;
@@ -47,8 +46,8 @@ public class Controller {
 
         this.connectionManager = new ConnectionManager();
         this.connection = this.connectionManager.getConnection();
-        this.session = new Session(null, null, null, null);
         this.orm = new MyObjectRelationalMapper(connection);
+        this.session = new Session(null, null, null, null,orm);
         this.userService = new UserService(orm, null, session);
 
         this.inputValidator = new InputValidator(orm);
@@ -61,7 +60,7 @@ public class Controller {
         this.createUserAccountScreen = new CreateUserAccountScreen(scanner, inputValidator, orm);
         this.userAccountLoginScreen = new UserAccountLoginScreen(scanner, inputValidator, screenManager, orm,session);
         this.depositScreen = new DepositScreen(scanner, inputValidator, orm,session);
-        this.withdrawalScreen = new WithdrawalScreen(scanner, inputValidator, orm);
+        this.withdrawalScreen = new WithdrawalScreen(scanner, inputValidator, orm,session);
         this.bankAccountScreen = new BankAccountScreen(session);
         this.userAccountScreen = new UserAccountScreen(scanner, inputValidator, orm, screenManager,session);
 
@@ -80,13 +79,7 @@ public class Controller {
     {
         while (appRunning)
         {
-            try
-            {
-                screenManager.navigate("/start");
-            } catch (IllegalInputException e)
-            {
-                e.printStackTrace();
-            }
+            screenManager.navigate("/start");
         }
     }
     public Scanner getScanner()
