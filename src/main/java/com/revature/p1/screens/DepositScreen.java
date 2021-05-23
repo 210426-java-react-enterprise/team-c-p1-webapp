@@ -28,10 +28,11 @@ public class DepositScreen extends Screen
         System.out.print("Enter amount to deposit: ");
         String input = scanner.nextLine();
         if (inputValidator.validate(input, "/deposit") == null)
-            return;
+                    return;
 
         session.getAccount().deposit(Double.parseDouble(input));
         orm.updateData(session.getAccount());
         orm.saveNewData(session.getAccount().getTransactions().get(session.getAccount().getTransactions().size() - 1));
+        session.loadCustomer(session.getCredentials());
     }
 }

@@ -48,7 +48,6 @@ public class CheckingAccount extends Account{
     {
         if (amount > balance)
         {
-            System.out.println("Amount specified is greater than the balance. Please try again.");
             return -1;
         }
         this.balance -= amount;

@@ -29,9 +29,15 @@ public class WithdrawalScreen extends Screen
         String input = scanner.nextLine();
         if (inputValidator.validate(input, "/deposit") == null)
             return;
-
-        session.getAccount().withdraw(Double.parseDouble(input));
-        orm.updateData(session.getAccount());
-        orm.saveNewData(session.getAccount().getTransactions().get(session.getAccount().getTransactions().size() - 1));
+        if (session.getAccount().withdraw(Double.parseDouble(input)) != -1)
+        {
+            orm.updateData(session.getAccount());
+            orm.saveNewData(session.getAccount()
+                                   .getTransactions()
+                                   .get(session.getAccount()
+                                               .getTransactions()
+                                               .size() - 1));
+            session.loadCustomer(session.getCredentials());
+        } else System.out.println("Amount specified is greater than the balance. Please try again.");
     }
 }
