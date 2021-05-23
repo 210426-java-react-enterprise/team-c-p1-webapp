@@ -20,7 +20,7 @@
 
     <servlet-mapping>
         <servlet-name>bankingServlet</servlet-name>
-        <url-pattern>/user</url-pattern>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

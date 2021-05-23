@@ -10,8 +10,8 @@ public class Dispatcher
     {
         switch (request.getRequestURI())
         {
-            case "/user":
-                response.getWriter().println("<h2> user we are good! </h2>");
+            case "/login":
+                response.getWriter().println("<h2> We got it here in the dispatcher </h2>");
                 //System.out.println(request.getRequestURI());
                 break;
             case "/data":

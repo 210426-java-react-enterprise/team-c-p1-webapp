@@ -30,8 +30,13 @@ public class BankingServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        response.getWriter().println("<h1> Get - We are good! </h1>");
-        response.getWriter().println(request.getServerPort());
+        dispatcher.dispatch(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        response.getWriter().println("<h1> username: " + username +" </h1>");
+        response.getWriter().println("<h1> password: " + password +" </h1>");
+
 
         //System.out.println(request.getRequestURI());
 
