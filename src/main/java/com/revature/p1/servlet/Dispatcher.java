@@ -12,11 +12,11 @@ public class Dispatcher
 
         switch (request.getRequestURI())
         {
-            case "/p1/login":
+            case "/p1_1/login":
                 response.getWriter().println("<h2> We got it here in the dispatcher </h2>");
                 //System.out.println(request.getRequestURI());
                 break;
-            case "/p1/data":
+            case "/p1_1/data":
                 response.getWriter().println("data we are good!");
                 //System.out.println(request.getRequestURI());
                 break;

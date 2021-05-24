@@ -14,9 +14,11 @@ public class DependencyLoaderListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             Class.forName("org.postgresql.Driver");
+            Class.forName("com.fasterxml.jackson.databind.ObjectMapper");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
