@@ -8,13 +8,15 @@ public class Dispatcher
 {
     public void dispatch(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+        response.getWriter().println("From the dispatcher:" + request.getRequestURI());
+
         switch (request.getRequestURI())
         {
-            case "/login":
+            case "/p1/login":
                 response.getWriter().println("<h2> We got it here in the dispatcher </h2>");
                 //System.out.println(request.getRequestURI());
                 break;
-            case "/data":
+            case "/p1/data":
                 response.getWriter().println("data we are good!");
                 //System.out.println(request.getRequestURI());
                 break;

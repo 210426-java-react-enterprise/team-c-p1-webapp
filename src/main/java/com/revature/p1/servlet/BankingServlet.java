@@ -21,7 +21,7 @@ public class BankingServlet extends HttpServlet
         Map<String,String[]> map = request.getParameterMap();
         for (String s : map.keySet())
         {
-            response.getWriter().println(s + "\t:\t" + Arrays.toString(map.get(s)));
+            response.getWriter().println("<h2> " + s + "\t:\t" + Arrays.toString(map.get(s)) + " </h2>");
 
         }
         //System.out.println("We are good!");
