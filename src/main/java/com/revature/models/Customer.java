@@ -32,6 +32,11 @@ public class Customer extends MySavable
             nullable = false,pk = false,fk = false,reference = "",unique = false,delete = "cascade")
     private String phone;
 
+    public Customer(String ssn) {
+        this.ssn = ssn;
+        accounts = new ArrayList<>();
+    }
+
 
     private List<Account> accounts;
 
@@ -92,5 +97,18 @@ public class Customer extends MySavable
     public Customer()
     {
         accounts = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Customer{");
+        sb.append("firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", ssn='").append(ssn).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", phone='").append(phone).append('\'');
+        sb.append(", accounts=").append(accounts);
+        sb.append('}');
+        return sb.toString();
     }
 }
