@@ -30,6 +30,15 @@ public class Address
 
     }
 
+    public Address(String unit, String street, String city, String state, String zip) {
+        this.unit = unit;
+        this.state = state;
+        this.street = street;
+        this.city = city;
+        this.zip = zip;
+
+    }
+
 
     public String getUnit() {
         return unit;

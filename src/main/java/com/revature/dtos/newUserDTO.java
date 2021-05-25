@@ -10,7 +10,11 @@ public class newUserDTO {
     private String ssn;
     private String email;
     private String phone;
-    private List<Account> accounts;
+    private String unit;
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
     private String username;
     private String password;
 
@@ -58,14 +62,6 @@ public class newUserDTO {
         this.phone = phone;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -80,5 +76,45 @@ public class newUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
     }
 }
