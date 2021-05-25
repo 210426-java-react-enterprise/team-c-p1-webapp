@@ -71,11 +71,13 @@ public class CustomerService {
         return new Credential(credentialDTO.getUsername(), credentialDTO.getPassword(), "");
     }
 
-    public void registerCustomer(Customer customer, Credential credential) {
+    public void registerCustomer(Customer customer, Credential credential, Address address) {
         try {
             credential.setSsn(customer.getSsn());
+            address.setSsn(customer.getSsn());
             orm.saveNewData(customer);
             orm.saveNewData(credential);
+            orm.saveNewData(address);
         } catch (Exception e) {
             throw new RuntimeException("something went wrong internally while registering the user");
         }

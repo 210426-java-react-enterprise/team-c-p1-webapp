@@ -1,10 +1,15 @@
 package com.revature.models;
 
+import com.revature.orm.MySavable;
 import com.revature.orm.annotations.ColumnType;
 import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
-public class Address
-{
+@MyEntity(name="address")
+public class Address extends MySavable {
+
+    @MyColumn(name = "customer_ssn", type = ColumnType.VARCHAR, length = 9, pk = true, reference = "", unique = true)
+    private String ssn;
 
     @MyColumn(  name = "unit",type = ColumnType.VARCHAR,length = 3,
             nullable = true,pk = false,fk = false,reference = "",unique = false)
@@ -36,7 +41,6 @@ public class Address
         this.street = street;
         this.city = city;
         this.zip = zip;
-
     }
 
 
@@ -78,5 +82,13 @@ public class Address
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
     }
 }

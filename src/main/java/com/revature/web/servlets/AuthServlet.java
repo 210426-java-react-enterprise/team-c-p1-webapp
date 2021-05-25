@@ -5,6 +5,8 @@ import com.revature.dtos.CredentialDTO;
 import com.revature.dtos.newUserDTO;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
+import com.revature.models.Account;
+import com.revature.models.Address;
 import com.revature.models.Credential;
 import com.revature.models.Customer;
 import com.revature.services.CustomerService;
@@ -70,12 +72,15 @@ public class AuthServlet extends HttpServlet {
                     newUserDTO newUser = mapper.readValue(req.getInputStream(), newUserDTO.class);
                     Customer customer = new Customer(newUser.getFirstName(), newUser.getLastName(), newUser.getSsn(),
                             newUser.getEmail(), newUser.getPhone());
+                    Address address = new Address(newUser.getUnit(), newUser.getStreet(), newUser.getCity(),
+                            newUser.getState(), newUser.getZip());
+                    address = customerService.validateAddress(address);
                     customer = customerService.validateCustomer(customer);
                     Credential credential = customerService.checkCredentials(new CredentialDTO(newUser.getUsername(),
                             newUser.getPassword()));
 
                     //TODO: Addresses
-                    customerService.registerCustomer(customer, credential);
+                    customerService.registerCustomer(customer, credential, address);
                     resp.getWriter().write("Registration Successful!");
                 } catch (MalformedInputException e) {
                     resp.setStatus(400);
