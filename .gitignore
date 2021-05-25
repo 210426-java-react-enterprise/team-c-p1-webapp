@@ -28,3 +28,6 @@ hs_err_pid*
 
 # Build folders
 target/
+
+#proerties files
+*.properties
