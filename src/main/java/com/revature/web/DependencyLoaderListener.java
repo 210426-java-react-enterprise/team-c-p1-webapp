@@ -1,10 +1,11 @@
 package com.revature.web;
 
+import com.revature.models.Account;
 import com.revature.orm.MyObjectRelationalMapper;
 import com.revature.repos.DataSource;
 import com.revature.services.CustomerService;
+import com.revature.web.servlets.AccountServlet;
 import com.revature.web.servlets.AuthServlet;
-import com.revature.web.servlets.BankServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -31,11 +32,11 @@ public class DependencyLoaderListener implements ServletContextListener {
 
         CustomerService customerService = new CustomerService(orm);
 
-        BankServlet bankServlet = new BankServlet(customerService);
+        AccountServlet accountServlet = new AccountServlet(customerService);
         AuthServlet authServlet = new AuthServlet(customerService);
 
         ServletContext context = sce.getServletContext();
-        context.addServlet("BankServlet", bankServlet).addMapping("/bank");
+        context.addServlet("BankServlet", accountServlet).addMapping("/account/*");
         context.addServlet("AuthServlet", authServlet).addMapping("/auth/*");
     }
 
