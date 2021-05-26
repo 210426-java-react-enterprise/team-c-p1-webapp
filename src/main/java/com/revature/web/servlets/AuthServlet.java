@@ -1,15 +1,13 @@
 package com.revature.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.dtos.CredentialDTO;
+import com.revature.daos.UserDAO;
+import com.revature.dtos.Credentials;
 import com.revature.dtos.newUserDTO;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
-import com.revature.models.Account;
-import com.revature.models.Address;
-import com.revature.models.Credential;
-import com.revature.models.Customer;
-import com.revature.services.CustomerService;
+import com.revature.models.User;
+import com.revature.services.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,14 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.MalformedInputException;
 
 public class AuthServlet extends HttpServlet {
 
-    private CustomerService customerService;
+    private UserService userService;
+    private UserDAO userDAO;
 
-    public AuthServlet(CustomerService customerService) {
-        this.customerService = customerService;
+    public AuthServlet(UserService userService, UserDAO userDAO) {
+        this.userService = userService;
+        this.userDAO = userDAO;
     }
 
     @Override
@@ -53,39 +52,27 @@ public class AuthServlet extends HttpServlet {
         switch (action) {
             case "login":
                 try {
-                    CredentialDTO creds = mapper.readValue(req.getInputStream(), CredentialDTO.class);
-                    Customer customer = customerService.validateCredentials(creds);
-
-                    req.getSession().setAttribute("this_user", customer);
+                    Credentials creds = mapper.readValue(req.getInputStream(), Credentials.class);
+                    User user = userService.validateUser(creds);
                     resp.setStatus(202);
-                    writer.write("Logged in successfully! your user is: " + customer.toString());
+                    req.getSession().setAttribute("this-user", user);
+                    writer.write(user.toString());
                 } catch (AuthenticationException e) {
                     resp.setStatus(401);
                     writer.write(e.getMessage());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    writer.write(e.getMessage());
                     resp.setStatus(500);
                 }
                 break;
             case "register":
                 try {
                     newUserDTO newUser = mapper.readValue(req.getInputStream(), newUserDTO.class);
-                    Customer customer = new Customer(newUser.getFirstName(), newUser.getLastName(), newUser.getSsn(),
-                            newUser.getEmail(), newUser.getPhone());
-                    Address address = new Address(newUser.getUnit(), newUser.getStreet(), newUser.getCity(),
-                            newUser.getState(), newUser.getZip());
-                    address = customerService.validateAddress(address);
-                    customer = customerService.validateCustomer(customer);
-                    Credential credential = customerService.checkCredentials(new CredentialDTO(newUser.getUsername(),
-                            newUser.getPassword()));
-
-                    //TODO: Addresses
-                    customerService.registerCustomer(customer, credential, address);
-                    resp.getWriter().write("Registration Successful!");
-                } catch (MalformedInputException e) {
-                    resp.setStatus(400);
-                    e.printStackTrace();
-                    writer.write(e.getMessage());
+                    User user = userService.validateUser(newUser);
+                    req.setAttribute("this-user", user);
+                    resp.setStatus(201);
+                    writer.write(user.toString());
                 } catch (InvalidRequestException e) {
                     resp.setStatus(400);
                     writer.write(e.getMessage());

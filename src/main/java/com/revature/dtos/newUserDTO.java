@@ -1,65 +1,18 @@
 package com.revature.dtos;
 
-import com.revature.models.Account;
+import java.time.LocalDateTime;
 
-import java.util.List;
+public  class newUserDTO {
 
-public class newUserDTO {
-    private String firstName;
-    private String lastName;
-    private String ssn;
-    private String email;
-    private String phone;
-    private String unit;
-    private String street;
-    private String city;
-    private String state;
-    private String zip;
     private String username;
     private String password;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String age;
 
     public newUserDTO() {
 
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getSsn() {
-        return ssn;
-    }
-
-    public void setSsn(String ssn) {
-        this.ssn = ssn;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getUsername() {
@@ -78,43 +31,36 @@ public class newUserDTO {
         this.password = password;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getStreet() {
-        return street;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getCity() {
-        return city;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getState() {
-        return state;
+    public String getAge() {
+        return age;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
+    public void setAge(String age) {
+        this.age = age;
     }
 }
+

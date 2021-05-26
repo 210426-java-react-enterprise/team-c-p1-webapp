@@ -40,8 +40,8 @@
 
         <dependency>
             <groupId>com.revature</groupId>
-            <artifactId>orm</artifactId>
-            <version>0.1</version>
+            <artifactId>team-c-p1-orm</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

@@ -1,65 +1,129 @@
 package com.revature.models;
 
+import com.revature.p1.utils.annotations.*;
 
-import com.revature.orm.MySavable;
-import com.revature.orm.annotations.ColumnType;
-import com.revature.orm.annotations.MyColumn;
-import com.revature.orm.annotations.MyEntity;
+import java.time.LocalDateTime;
 
-@MyEntity(name = "transaction")
-public class Transaction extends MySavable
-{
-    @MyColumn(  name = "type",nullable = false,unique = false,type = ColumnType.VARCHAR,length = 10,pk = false,
-            fk = false,reference = "",delete = "cascade")
-    private final String type;
+@Entity(name = "transactions")
+public class Transaction {
 
-    @MyColumn(  name = "amount",nullable = false,unique = false,type = ColumnType.DECIMAL,length = 0,pk = false,
-            fk = false,reference = "",delete = "cascade")
-    private final double amount;
+    @Key
+    @Column
+    private int transactionID;
 
-    @MyColumn(  name = "balance",nullable = false,unique = false,type = ColumnType.DECIMAL,length = 0,pk = false,
-            fk = false,reference = "",delete = "cascade")
-    private final double balance;
+    @Column(name = "sender_name")
+    private String sender;
 
-    @MyColumn(  name = "account_number",nullable = false,unique = false,type = ColumnType.VARCHAR,length = 10,pk = false,
-            fk = true,reference = "account(number)",delete = "cascade")
-    private final int accountNumber;
+    @Column(name = "sender_account")
+    private int senderAccount;
 
-    public Transaction(String type, double amount, double balance, int accountNumber)
-    {
-        this.type = type;
+    @Column(name = "recipient_name")
+    private String recipient;
+
+    @Column(name = "recipient_account")
+    private int recipientAccount;
+
+    @Column(name = "transaction_type")
+    private String transactionType;
+
+    @Column
+    private double amount;
+
+    @Column(name = "transaction_date", isTimestamp = true)
+    private LocalDateTime date;
+
+    public Transaction () {
+
+    }
+
+    public Transaction (int transactionID, String sender, int senderAccount, String recipient,
+                        int recipientAccount, double amount, LocalDateTime date, String transactionType) {
+        this.transactionID = transactionID;
+        this.sender = sender;
+        this.senderAccount = senderAccount;
+        this.recipient = recipient;
+        this.recipientAccount = recipientAccount;
         this.amount = amount;
-        this.balance = balance;
-        this.accountNumber = accountNumber;
+        this.date = LocalDateTime.now();
+        this.transactionType = transactionType;
     }
 
-    public int getAccountNumber()
-    {
-        return accountNumber;
+    public int getTransactionID() {
+        return transactionID;
     }
 
-    public String getType()
-    {
-        return type;
+    public void setTransactionID(int transactionID) {
+        this.transactionID = transactionID;
     }
 
-    public double getAmount()
-    {
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public int getSenderAccount() {
+        return senderAccount;
+    }
+
+    public void setSenderAccount(int senderAccount) {
+        this.senderAccount = senderAccount;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    public int getRecipientAccount() {
+        return recipientAccount;
+    }
+
+    public void setRecipientAccount(int recipientAccount) {
+        this.recipientAccount = recipientAccount;
+    }
+
+    public double getAmount() {
         return amount;
     }
 
-    public double getBalance()
-    {
-        return balance;
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
     @Override
-    public String toString()
-    {
-        return "{Transaction - " +
-                "type = '" + type + '\'' +
-                ", amount = $" + amount +
-                ", balance = $" + balance +
-                '}';
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Transaction{");
+        sb.append("transactionID=").append(transactionID);
+        sb.append(", sender='").append(sender).append('\'');
+        sb.append(", senderAccount=").append(senderAccount);
+        sb.append(", recipient='").append(recipient).append('\'');
+        sb.append(", recipientAccount=").append(recipientAccount);
+        sb.append(", transactionType='").append(transactionType).append('\'');
+        sb.append(", amount=").append(amount);
+        sb.append(", date=").append(date);
+        sb.append('}');
+        return sb.toString();
     }
 }
