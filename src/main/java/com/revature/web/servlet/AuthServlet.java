@@ -2,6 +2,7 @@ package com.revature.web.servlet;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.assigments.p1.util.HtmlBuilder;
 import com.revature.dtos.LoginMapper;
 import com.revature.models.Credential;
 import com.revature.models.Customer;
@@ -11,8 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AuthServlet extends HttpServlet {
 
@@ -31,10 +35,16 @@ public class AuthServlet extends HttpServlet {
 
         try{
             LoginMapper login = mapper.readValue(req.getInputStream(), LoginMapper.class);
-            //Customer authCustomer = userService.authenticate(creds);
+            HttpSession session = req.getSession(true);
             Credential crd = userService.authenticate(login);
-            resp.getWriter().println(crd.toString());
-            // I continue here to create a session
+            if(crd==null){
+                resp.setStatus(401);
+            }else{
+                resp.setStatus(200);
+                Map<String,String> table = new HashMap<>();
+                table.put("Login Successfully!!!",crd.getUsername());
+                resp.getWriter().println(HtmlBuilder.buildHtmlTable("Login",table));
+            }
 
         }catch (Exception e){
             e.printStackTrace();

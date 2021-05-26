@@ -27,9 +27,11 @@ public class UserService {
         try(Connection conn = connectionPool.pollFromConnectionPool()){
             MyObjectRelationalMapper myObjectRelationalMapper = new MyObjectRelationalMapper(conn);
 
-            Credential credential = new Credential(login.getUsername());
-            Credential cred = (Credential) myObjectRelationalMapper.readRow(credential);
-            return cred;
+            Credential creds = new Credential(login.getUsername());
+            Credential returnedCreds = (Credential) myObjectRelationalMapper.readRow(creds);
+            if(returnedCreds.getPassword().equals(login.getPassword())){
+                return returnedCreds;
+            }
 
         }catch (SQLException throwables) {
             throwables.printStackTrace();
