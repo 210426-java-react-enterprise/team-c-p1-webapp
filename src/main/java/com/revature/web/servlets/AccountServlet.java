@@ -1,6 +1,7 @@
 package com.revature.web.servlets;
 
-import com.revature.services.CustomerService;
+import com.revature.daos.UserDAO;
+import com.revature.services.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,10 +11,12 @@ import java.io.IOException;
 
 public class AccountServlet extends HttpServlet {
 
-    private CustomerService customerService;
+    private UserService userService;
+    private UserDAO userDAO;
 
-    public AccountServlet(CustomerService customerService) {
-        this.customerService = customerService;
+    public AccountServlet(UserService userService, UserDAO userDAO) {
+        this.userService = userService;
+        this.userDAO = userDAO;
     }
 
     @Override

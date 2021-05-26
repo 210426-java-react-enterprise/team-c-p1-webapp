@@ -1,39 +1,49 @@
 package com.revature.web;
 
-import com.revature.models.Account;
-import com.revature.orm.MyObjectRelationalMapper;
-import com.revature.repos.DataSource;
-import com.revature.services.CustomerService;
+import com.revature.daos.UserDAO;
+import com.revature.p1.repos.DataSource;
+import com.revature.p1.utils.EntityManager;
+import com.revature.services.UserService;
 import com.revature.web.servlets.AccountServlet;
 import com.revature.web.servlets.AuthServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class DependencyLoaderListener implements ServletContextListener {
 
+    private Properties props = new Properties();
+    private String url;
+    private String login;
+    private String password;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+
         try {
             Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream input = loader.getResourceAsStream("application.properties");
+            props.load(input);
+            DataSource.setUrl(props.getProperty("host_url"));
+            DataSource.setLogin(props.getProperty("db_login"));
+            DataSource.setPassword(props.getProperty("db_password"));
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
 
-        MyObjectRelationalMapper orm = null;
+        EntityManager em = new EntityManager();
 
-        try {
-            orm = new MyObjectRelationalMapper(DataSource.getInstance().getConnection());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        CustomerService customerService = new CustomerService(orm);
+        UserService userService = new UserService(em);
+        UserDAO userDAO = new UserDAO(em);
 
-        AccountServlet accountServlet = new AccountServlet(customerService);
-        AuthServlet authServlet = new AuthServlet(customerService);
+        AccountServlet accountServlet = new AccountServlet(userService, userDAO);
+        AuthServlet authServlet = new AuthServlet(userService, userDAO);
 
         ServletContext context = sce.getServletContext();
         context.addServlet("BankServlet", accountServlet).addMapping("/account/*");
