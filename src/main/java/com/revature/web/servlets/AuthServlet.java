@@ -7,7 +7,7 @@ import com.revature.dtos.newUserDTO;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.models.User;
-import com.revature.services.UserService;
+import com.revature.services.BankService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,11 +19,11 @@ import java.io.PrintWriter;
 
 public class AuthServlet extends HttpServlet {
 
-    private UserService userService;
+    private BankService bankService;
     private UserDAO userDAO;
 
-    public AuthServlet(UserService userService, UserDAO userDAO) {
-        this.userService = userService;
+    public AuthServlet(BankService bankService, UserDAO userDAO) {
+        this.bankService = bankService;
         this.userDAO = userDAO;
     }
 
@@ -53,7 +53,7 @@ public class AuthServlet extends HttpServlet {
             case "login":
                 try {
                     Credentials creds = mapper.readValue(req.getInputStream(), Credentials.class);
-                    User user = userService.validateUser(creds);
+                    User user = bankService.validateUser(creds);
                     resp.setStatus(202);
                     req.getSession().setAttribute("this-user", user);
                     writer.write(user.toString());
@@ -69,7 +69,7 @@ public class AuthServlet extends HttpServlet {
             case "register":
                 try {
                     newUserDTO newUser = mapper.readValue(req.getInputStream(), newUserDTO.class);
-                    User user = userService.validateUser(newUser);
+                    User user = bankService.validateUser(newUser);
                     req.setAttribute("this-user", user);
                     resp.setStatus(201);
                     writer.write(user.toString());

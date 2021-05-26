@@ -56,7 +56,13 @@ public class Account {
         this.balance = balance;
     }
 
-//    public User getUser () {
-//        return this.user;
-//    }
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Account{");
+        sb.append("accountID=").append(accountID);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", balance=").append(balance);
+        sb.append('}');
+        return sb.toString();
+    }
 }
