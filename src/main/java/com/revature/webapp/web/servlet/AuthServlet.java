@@ -1,15 +1,10 @@
-package com.revature.web.servlet;
+package com.revature.webapp.web.servlet;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.revature.assigments.p1.util.HtmlBuilder;
-import com.revature.dtos.LoginMapper;
-import com.revature.models.Credential;
-import com.revature.models.Customer;
-import com.revature.service.UserService;
-import jdk.nashorn.api.scripting.JSObject;
+import com.revature.webapp.dtos.LoginMapper;
+import com.revature.webapp.models.Credential;
+import com.revature.webapp.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AuthServlet extends HttpServlet {
 

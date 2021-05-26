@@ -1,13 +1,12 @@
-package com.revature.service;
+package com.revature.webapp.service;
 
-import com.revature.daos.UserDAO;
-import com.revature.dtos.LoginMapper;
-import com.revature.exceptions.CustomerNotFound;
-import com.revature.models.Account;
-import com.revature.models.Credential;
-import com.revature.models.Customer;
+import com.revature.webapp.daos.UserDAO;
+import com.revature.webapp.dtos.LoginMapper;
+import com.revature.webapp.exceptions.CustomerNotFound;
+import com.revature.webapp.models.Credential;
+import com.revature.webapp.models.Customer;
+import com.revature.webapp.repos.ConnectionPool;
 import com.revature.orm.MyObjectRelationalMapper;
-import com.revature.repos.ConnectionPool;
 
 import javax.naming.AuthenticationException;
 import java.sql.Connection;

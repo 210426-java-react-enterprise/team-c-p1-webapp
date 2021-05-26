@@ -1,4 +1,4 @@
-package com.revature.dtos;
+package com.revature.webapp.dtos;
 
 public class LoginMapper {
 

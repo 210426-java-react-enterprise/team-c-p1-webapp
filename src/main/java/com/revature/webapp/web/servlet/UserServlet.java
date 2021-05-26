@@ -1,17 +1,13 @@
-package com.revature.web.servlet;
+package com.revature.webapp.web.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.dtos.LoginMapper;
-import com.revature.models.Credential;
-import com.revature.models.Customer;
-import com.revature.service.UserService;
+import com.revature.webapp.models.Customer;
+import com.revature.webapp.service.UserService;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 

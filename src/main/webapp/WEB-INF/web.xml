@@ -15,9 +15,18 @@
             the name of the servlet later to reference this instance.
             -->
 
-
+<!--
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>com.revature.web.servlet.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/auth</url-pattern>
+    </servlet-mapping>
+-->
     <listener>
-        <listener-class>com.revature.web.DependencyLoaderListener</listener-class>
+        <listener-class>com.revature.webapp.web.DependencyLoaderListener</listener-class>
     </listener>
 
 </web-app>

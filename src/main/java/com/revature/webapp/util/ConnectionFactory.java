@@ -1,8 +1,6 @@
-package com.revature.util;
+package com.revature.webapp.util;
 
-import javax.sql.ConnectionPoolDataSource;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;

@@ -1,10 +1,11 @@
-package com.revature.web;
+package com.revature.webapp.web;
 
-import com.revature.daos.UserDAO;
-import com.revature.repos.ConnectionPool;
-import com.revature.service.UserService;
-import com.revature.web.servlet.AuthServlet;
-import com.revature.web.servlet.UserServlet;
+import com.revature.webapp.daos.UserDAO;
+import com.revature.webapp.web.servlet.UserServlet;
+import com.revature.webapp.repos.ConnectionPool;
+import com.revature.webapp.service.UserService;
+import com.revature.webapp.web.servlet.AuthServlet;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

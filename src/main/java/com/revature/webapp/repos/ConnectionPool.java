@@ -1,6 +1,6 @@
-package com.revature.repos;
+package com.revature.webapp.repos;
 
-import com.revature.util.ConnectionFactory;
+import com.revature.webapp.util.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;

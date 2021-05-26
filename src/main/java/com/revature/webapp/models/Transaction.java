@@ -1,4 +1,4 @@
-package com.revature.models;
+package com.revature.webapp.models;
 
 
 import com.revature.orm.MySavable;
