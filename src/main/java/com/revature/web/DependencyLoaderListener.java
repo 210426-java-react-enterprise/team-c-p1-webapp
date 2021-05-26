@@ -1,6 +1,7 @@
 package com.revature.web;
 
 import com.revature.daos.UserDAO;
+import com.revature.repos.ConnectionPool;
 import com.revature.service.UserService;
 import com.revature.web.servlet.AuthServlet;
 
@@ -14,9 +15,10 @@ public class DependencyLoaderListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 
-        UserDAO userDao = new UserDAO();
-        UserService userService = new UserService(userDao);
 
+        ConnectionPool connectionPool = ConnectionPool.getConnectionPool();
+        UserDAO userDao = new UserDAO();
+        UserService userService = new UserService(connectionPool,userDao);
         AuthServlet authServlet = new AuthServlet(userService);
 
         ServletContext context = sce.getServletContext();

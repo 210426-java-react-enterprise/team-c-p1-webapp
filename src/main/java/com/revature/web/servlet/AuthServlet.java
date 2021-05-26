@@ -2,6 +2,9 @@ package com.revature.web.servlet;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.dtos.LoginMapper;
+import com.revature.models.Credential;
+import com.revature.models.Customer;
 import com.revature.service.UserService;
 
 import javax.servlet.ServletException;
@@ -27,7 +30,11 @@ public class AuthServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         try{
-            //Credential creds = mapper.readValue()
+            LoginMapper login = mapper.readValue(req.getInputStream(), LoginMapper.class);
+            //Customer authCustomer = userService.authenticate(creds);
+            Credential crd = userService.authenticate(login);
+            resp.getWriter().println(crd.toString());
+            // I continue here to create a session
 
         }catch (Exception e){
             e.printStackTrace();

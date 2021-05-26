@@ -33,12 +33,11 @@ public class Credential extends MySavable
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Credential{");
-        sb.append("username='").append(username).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", ssn='").append(ssn).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Credential{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", ssn='" + ssn + '\'' +
+                '}';
     }
 
     public String getUsername() {
