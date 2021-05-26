@@ -2,6 +2,8 @@ package com.revature.service;
 
 import com.revature.daos.UserDAO;
 import com.revature.dtos.LoginMapper;
+import com.revature.exceptions.CustomerNotFound;
+import com.revature.models.Account;
 import com.revature.models.Credential;
 import com.revature.models.Customer;
 import com.revature.orm.MyObjectRelationalMapper;
@@ -10,6 +12,7 @@ import com.revature.repos.ConnectionPool;
 import javax.naming.AuthenticationException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UserService {
     private ConnectionPool connectionPool;
@@ -22,14 +25,13 @@ public class UserService {
 
     public Credential authenticate(LoginMapper login) throws AuthenticationException {
 
-
-
         try(Connection conn = connectionPool.pollFromConnectionPool()){
             MyObjectRelationalMapper myObjectRelationalMapper = new MyObjectRelationalMapper(conn);
 
             Credential creds = new Credential(login.getUsername());
             Credential returnedCreds = (Credential) myObjectRelationalMapper.readRow(creds);
             if(returnedCreds.getPassword().equals(login.getPassword())){
+                connectionPool.addToConnectionPool(conn);
                 return returnedCreds;
             }
 
@@ -38,5 +40,30 @@ public class UserService {
         }
         return null;
     }
+
+    public Customer bringCustomerData(String ssn){
+        try(Connection conn = connectionPool.pollFromConnectionPool()){
+            MyObjectRelationalMapper myObjectRelationalMapper = new MyObjectRelationalMapper(conn);
+
+            Customer customer = new Customer(ssn);
+            Customer returnedCustomer = (Customer) myObjectRelationalMapper.readRow(customer);
+            if(returnedCustomer!=null){
+                ArrayList accts = new ArrayList();
+
+                //Account acct = (Account) myObjectRelationalMapper.readRows()
+
+                connectionPool.addToConnectionPool(conn);
+                return returnedCustomer;
+            }else{
+                connectionPool.addToConnectionPool(conn);
+                throw new CustomerNotFound();
+            }
+
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

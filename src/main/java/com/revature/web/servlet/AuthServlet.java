@@ -1,12 +1,15 @@
 package com.revature.web.servlet;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.revature.assigments.p1.util.HtmlBuilder;
 import com.revature.dtos.LoginMapper;
 import com.revature.models.Credential;
 import com.revature.models.Customer;
 import com.revature.service.UserService;
+import jdk.nashorn.api.scripting.JSObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,16 +44,12 @@ public class AuthServlet extends HttpServlet {
                 resp.setStatus(401);
             }else{
                 resp.setStatus(200);
-                Map<String,String> table = new HashMap<>();
-                table.put("Login Successfully!!!",crd.getUsername());
-                resp.getWriter().println(HtmlBuilder.buildHtmlTable("Login",table));
+                write.write(mapper.writeValueAsString(crd.toString()));
             }
 
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 
 
