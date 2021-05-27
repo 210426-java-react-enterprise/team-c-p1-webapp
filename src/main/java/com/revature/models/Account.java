@@ -2,6 +2,9 @@ package com.revature.models;
 
 import com.revature.p1.utils.annotations.*;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  * Account
  * <p>
@@ -17,7 +20,7 @@ public class Account {
     @Column(name = "account_name")
     private String name;
 
-    @Column
+    @Column(isDouble = true)
     private double balance;
 
 
@@ -64,5 +67,10 @@ public class Account {
         sb.append(", balance=").append(balance);
         sb.append('}');
         return sb.toString();
+    }
+
+    public String getBalanceFormatted() {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+        return formatter.format(balance);
     }
 }

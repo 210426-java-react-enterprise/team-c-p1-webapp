@@ -1,11 +1,13 @@
 package com.revature.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.daos.AccountDAO;
 import com.revature.daos.UserDAO;
-import com.revature.dtos.Credentials;
+import com.revature.dtos.CredentialDTO;
 import com.revature.dtos.newUserDTO;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
+import com.revature.models.Account;
 import com.revature.models.User;
 import com.revature.services.BankService;
 
@@ -16,15 +18,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class AuthServlet extends HttpServlet {
 
     private BankService bankService;
     private UserDAO userDAO;
+    private AccountDAO accountDAO;
 
-    public AuthServlet(BankService bankService, UserDAO userDAO) {
+    public AuthServlet(BankService bankService, UserDAO userDAO, AccountDAO accountDAO) {
         this.bankService = bankService;
         this.userDAO = userDAO;
+        this.accountDAO = accountDAO;
     }
 
     @Override
@@ -52,11 +57,13 @@ public class AuthServlet extends HttpServlet {
         switch (action) {
             case "login":
                 try {
-                    Credentials creds = mapper.readValue(req.getInputStream(), Credentials.class);
+                    CredentialDTO creds = mapper.readValue(req.getInputStream(), CredentialDTO.class);
                     User user = bankService.validateUser(creds);
                     resp.setStatus(202);
                     req.getSession().setAttribute("this-user", user);
-                    writer.write(user.toString());
+                    List<Account> accounts = accountDAO.getAccountsByUserID(user);
+                    req.getSession().setAttribute("user-accounts", accounts);
+                    writer.write(user.toString() + " with accounts: " + accounts);
                 } catch (AuthenticationException e) {
                     resp.setStatus(401);
                     writer.write(e.getMessage());

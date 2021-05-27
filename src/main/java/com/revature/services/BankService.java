@@ -2,16 +2,18 @@ package com.revature.services;
 
 import com.revature.daos.AccountDAO;
 import com.revature.dtos.AccountDTO;
-import com.revature.dtos.Credentials;
+import com.revature.dtos.CredentialDTO;
+import com.revature.dtos.TransactionDTO;
 import com.revature.dtos.newUserDTO;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
-import com.revature.exceptions.ResourcePersistenceException;
 import com.revature.models.Account;
+import com.revature.models.Transaction;
 import com.revature.models.User;
 import com.revature.p1.utils.EntityManager;
 
 import java.util.List;
+import java.util.Locale;
 
 public class BankService {
 
@@ -23,7 +25,7 @@ public class BankService {
         this.em = em;
     }
 
-    public User validateUser(Credentials creds) {
+    public User validateUser(CredentialDTO creds) {
         List<User> soughtUser = em.getAllOnCondition(User.class, "username", creds.getUsername());
 
         if (soughtUser != null && !soughtUser.isEmpty() && soughtUser.get(0).getPassword().equals(creds.getPassword())) {
@@ -55,17 +57,17 @@ public class BankService {
         if (user.getUsername() == null || user.getUsername().trim().isEmpty() || user.getUsername().length() > 50)
             throw new InvalidRequestException("The first name was invalid");
 
-       try {
-           int age = Integer.parseInt(user.getAge());
-           if(age < 0 || age >= 200)
-               throw new InvalidRequestException("The age was invalid");
+        try {
+            int age = Integer.parseInt(user.getAge());
+            if (age < 0 || age >= 200)
+                throw new InvalidRequestException("The age was invalid");
 
-           User userToBeSaved = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstName(),
-            user.getLastName(), age);
-           return em.save(userToBeSaved);
-       } catch (NumberFormatException e) {
-           throw new InvalidRequestException("The age was invalid");
-       }
+            User userToBeSaved = new User(user.getUsername(), user.getPassword(), user.getEmail(), user.getFirstName(),
+                    user.getLastName(), age);
+            return em.save(userToBeSaved);
+        } catch (NumberFormatException e) {
+            throw new InvalidRequestException("The age was invalid");
+        }
 
     }
 
@@ -89,6 +91,63 @@ public class BankService {
             throw new InvalidRequestException("The balance was invalid");
         }
 
+
+    }
+
+    public boolean handleTransaction(TransactionDTO transactionDTO, List<Account> accounts, User user) {
+
+        double amount;
+        int recipientID;
+        Transaction transaction;
+
+        try {
+            recipientID = Integer.parseInt(transactionDTO.getRecipient());
+            amount = Double.parseDouble(transactionDTO.getAmount());
+        } catch (NumberFormatException e) {
+            throw new InvalidRequestException("An invalid number was supplied");
+        }
+
+        Account userAccount = accounts.stream()
+                .filter(account -> String.valueOf(account.getAccountID()).equals(transactionDTO.getId()))
+                .findFirst()
+                .orElseThrow(() -> new InvalidRequestException("The user account did not exist"));
+
+        switch (transactionDTO.getAction().toLowerCase(Locale.ROOT)) {
+            case "deposit":
+                transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
+                        user.getUsername(), userAccount.getAccountID(), amount, "deposit");
+                userAccount.setBalance(userAccount.getBalance() + amount);
+                em.update(userAccount);
+                em.save(transaction);
+                return true;
+            case "withdraw":
+                transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
+                        user.getUsername(), userAccount.getAccountID(), amount, "withdrawal");
+                if (amount > userAccount.getBalance()) {
+                    throw new InvalidRequestException("You cannot withdraw more than what you have!");
+                }
+                userAccount.setBalance(userAccount.getBalance() - amount);
+                em.update(userAccount);
+                em.save(transaction);
+                return true;
+            case "transfer":
+
+                if (amount > userAccount.getBalance()) {
+                    throw new InvalidRequestException("You cannot transfer more than what you have!");
+                }
+                Account recipient = (Account) em.get(Account.class, recipientID);
+                String recipientName = accountDAO.getUserNameFromAccount(recipientID);
+                userAccount.setBalance(userAccount.getBalance() - amount);
+                recipient.setBalance(recipient.getBalance() + amount);
+                transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
+                        recipientName, recipientID, amount, "transfer");
+                em.save(recipient);
+                em.update(userAccount);
+                em.save(transaction);
+                return true;
+            default:
+                throw new InvalidRequestException("The action specified is not supported.");
+        }
 
     }
 

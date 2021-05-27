@@ -29,22 +29,28 @@ public class Transaction {
     @Column
     private double amount;
 
-    @Column(name = "transaction_date", isTimestamp = true)
-    private LocalDateTime date;
-
     public Transaction () {
 
     }
 
     public Transaction (int transactionID, String sender, int senderAccount, String recipient,
-                        int recipientAccount, double amount, LocalDateTime date, String transactionType) {
+                        int recipientAccount, double amount, String transactionType) {
         this.transactionID = transactionID;
         this.sender = sender;
         this.senderAccount = senderAccount;
         this.recipient = recipient;
         this.recipientAccount = recipientAccount;
         this.amount = amount;
-        this.date = LocalDateTime.now();
+        this.transactionType = transactionType;
+    }
+
+    public Transaction (String sender, int senderAccount, String recipient,
+                        int recipientAccount, double amount, String transactionType) {
+        this.sender = sender;
+        this.senderAccount = senderAccount;
+        this.recipient = recipient;
+        this.recipientAccount = recipientAccount;
+        this.amount = amount;
         this.transactionType = transactionType;
     }
 
@@ -96,14 +102,6 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
     public String getTransactionType() {
         return transactionType;
     }
@@ -122,7 +120,6 @@ public class Transaction {
         sb.append(", recipientAccount=").append(recipientAccount);
         sb.append(", transactionType='").append(transactionType).append('\'');
         sb.append(", amount=").append(amount);
-        sb.append(", date=").append(date);
         sb.append('}');
         return sb.toString();
     }
