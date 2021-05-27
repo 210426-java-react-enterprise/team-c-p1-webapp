@@ -1,6 +1,6 @@
 package com.revature.p1.screens;
 
-import com.revature.p1.orms.MyObjectRelationalMapper;
+import com.revature.orm.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
 import com.revature.p1.utilities.datasource.Session;
 

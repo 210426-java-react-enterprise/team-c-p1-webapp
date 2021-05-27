@@ -1,15 +1,16 @@
 package com.revature.p1.entities;
 
-import com.revature.p1.annotations.ColumnType;
-import com.revature.p1.annotations.MyColumn;
-import com.revature.p1.annotations.MyEntity;
 
+import com.revature.orm.MySavable;
+import com.revature.orm.annotations.ColumnType;
+import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
 @MyEntity(name = "credential")
 public class Credential extends MySavable
 {
-    @MyColumn(  name = "user_name",type = ColumnType.VARCHAR,length = 15,
-            nullable = false,pk = true,fk = false,reference = "",unique = true,delete = "cascade")
+    @MyColumn(name = "user_name", type = ColumnType.VARCHAR, length = 15,
+              nullable = false, pk = true, fk = false, reference = "", unique = true, delete = "cascade")
     private String username;
 
     @MyColumn(  name = "password",type = ColumnType.VARCHAR,length = 50,
@@ -25,6 +26,12 @@ public class Credential extends MySavable
         this.username = username;
         this.password = password;
         this.ssn = ssn;
+    }
+    public Credential(String username)
+    {
+        this.username = username;
+        this.password = "";
+        this.ssn = "";
     }
 
     public Credential(MySavable savable)
@@ -62,5 +69,15 @@ public class Credential extends MySavable
     public void setSsn(String ssn)
     {
         this.ssn = ssn;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Credential{" +
+                       "username='" + username + '\'' +
+                       ", password='" + password + '\'' +
+                       ", ssn='" + ssn + '\'' +
+                       '}';
     }
 }

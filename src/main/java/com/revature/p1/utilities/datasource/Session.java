@@ -1,7 +1,8 @@
 package com.revature.p1.utilities.datasource;
 
+import com.revature.orm.MyObjectRelationalMapper;
+import com.revature.orm.MySavable;
 import com.revature.p1.entities.*;
-import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.persistance.ConnectionManager;
 
 import java.sql.Connection;
@@ -19,7 +20,8 @@ public class Session
 
     public Session(Customer customer, Transaction transactions, Credential credentials, Account account, MyObjectRelationalMapper orm)
     {
-        connection = ConnectionManager.getConnection();
+        connection = ConnectionManager.getInstance()
+                                      .getConnection();
         this.orm = orm;
         if (transactions != null)
         {

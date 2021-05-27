@@ -1,7 +1,7 @@
 package com.revature.p1.services;
 
+import com.revature.orm.MyObjectRelationalMapper;
 import com.revature.p1.entities.Customer;
-import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.datasource.Session;
 
 public class UserService

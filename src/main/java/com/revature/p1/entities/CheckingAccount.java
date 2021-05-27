@@ -1,8 +1,8 @@
 package com.revature.p1.entities;
 
-import com.revature.p1.annotations.ColumnType;
-import com.revature.p1.annotations.MyColumn;
-import com.revature.p1.annotations.MyEntity;
+import com.revature.orm.annotations.ColumnType;
+import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
 import java.util.ArrayList;
 import java.util.List;

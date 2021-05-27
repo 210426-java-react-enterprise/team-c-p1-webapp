@@ -1,14 +1,16 @@
 package com.revature.p1.entities;
 
-import com.revature.p1.annotations.ColumnType;
-import com.revature.p1.annotations.MyColumn;
-import com.revature.p1.annotations.MyEntity;
+
+import com.revature.orm.MySavable;
+import com.revature.orm.annotations.ColumnType;
+import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
 @MyEntity(name = "address")
 public class Address extends MySavable
 {
-    @MyColumn(  name = "unit",type = ColumnType.VARCHAR,length = 3,
-            nullable = true,pk = false,fk = false,reference = "",unique = false)
+    @MyColumn(name = "unit", type = ColumnType.VARCHAR, length = 3,
+              nullable = true, pk = false, fk = false, reference = "", unique = false)
     private String unit;
 
     @MyColumn(  name = "street",type = ColumnType.VARCHAR,length = 30,

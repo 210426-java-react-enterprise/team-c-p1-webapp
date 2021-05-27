@@ -1,5 +1,16 @@
 package com.revature.p1.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.revature.orm.MyObjectRelationalMapper;
+import com.revature.p1.persistance.ConnectionManager;
+import com.revature.p1.services.HtmlService;
+import com.revature.p1.services.WebUserService;
+import com.revature.p1.utilities.InputValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -12,13 +23,30 @@ import javax.servlet.ServletContextListener;
 public class DependencyLoaderListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        try {
-            Class.forName("org.postgresql.Driver");
-            Class.forName("com.fasterxml.jackson.databind.ObjectMapper");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
 
+        MyObjectRelationalMapper orm = new MyObjectRelationalMapper(ConnectionManager.getInstance()
+                                                                                             .getConnection());
+        Logger logger = LogManager.getLogger();
+        ObjectMapper objectMapper = new JsonMapper();
+        InputValidator iv = new InputValidator(orm);
+        WebUserService webUserService = new WebUserService(orm, iv, logger);
+        HtmlService htmlService = new HtmlService();
+
+
+        WelcomeServlet welcomeServlet = new WelcomeServlet(objectMapper,htmlService);
+        AuthServlet     authServlet = new AuthServlet(webUserService, objectMapper, logger,htmlService);
+        AccountsServlet accountsServlet = new AccountsServlet(webUserService,objectMapper, logger,htmlService);
+        NewAccountServlet newAccountServlet = new NewAccountServlet(webUserService, objectMapper, logger,htmlService);
+        AccountServlet accountServlet = new AccountServlet(webUserService, objectMapper, logger, iv,htmlService);
+
+
+        ServletContext context = sce.getServletContext();
+
+        context.addServlet("welcomeServlet", welcomeServlet).addMapping("/");
+        context.addServlet("authServlet", authServlet).addMapping("/login");
+        context.addServlet("accountsServlet", accountsServlet).addMapping("/user/accounts");
+        context.addServlet("newAccountServlet", newAccountServlet).addMapping("/user/accounts/new");
+        context.addServlet("accountServlet", accountServlet).addMapping("/user/account");
     }
 
     @Override

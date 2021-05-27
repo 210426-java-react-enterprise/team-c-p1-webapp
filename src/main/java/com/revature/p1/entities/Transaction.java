@@ -1,15 +1,16 @@
 package com.revature.p1.entities;
 
 
-import com.revature.p1.annotations.ColumnType;
-import com.revature.p1.annotations.MyColumn;
-import com.revature.p1.annotations.MyEntity;
+import com.revature.orm.MySavable;
+import com.revature.orm.annotations.ColumnType;
+import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
 @MyEntity(name = "transaction")
 public class Transaction extends MySavable
 {
-    @MyColumn(  name = "type",nullable = false,unique = false,type = ColumnType.VARCHAR,length = 10,pk = false,
-                fk = false,reference = "",delete = "cascade")
+    @MyColumn(name = "type", nullable = false, unique = false, type = ColumnType.VARCHAR, length = 10, pk = false,
+              fk = false, reference = "", delete = "cascade")
     private String type;
 
     @MyColumn(  name = "amount",nullable = false,unique = false,type = ColumnType.DECIMAL,length = 0,pk = false,
@@ -83,11 +84,10 @@ public class Transaction extends MySavable
     @Override
     public String toString()
     {
-        return "{Transaction - " +
-                "type = '" + type + '\'' +
-                ", amount = $" + amount +
-                ", balance = $" + balance +
-                       ", number = $" + accountNumber +
-                '}';
+        return "Transaction - " +
+                "type: '" + type + '\'' +
+                ", amount: $" + amount +
+                ", balance: $" + balance +
+                       ", account number = " + accountNumber;
     }
 }

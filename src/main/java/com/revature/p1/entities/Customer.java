@@ -1,9 +1,10 @@
 package com.revature.p1.entities;
 
 
-import com.revature.p1.annotations.ColumnType;
-import com.revature.p1.annotations.MyColumn;
-import com.revature.p1.annotations.MyEntity;
+import com.revature.orm.MySavable;
+import com.revature.orm.annotations.ColumnType;
+import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,8 @@ import java.util.List;
 @MyEntity(name = "customer")
 public class Customer extends MySavable
 {
-    @MyColumn(  name = "first_name",type = ColumnType.VARCHAR,length = 20,
-                nullable = false,pk = false,fk = false,reference = "",unique = false,delete = "cascade")
+    @MyColumn(name = "first_name", type = ColumnType.VARCHAR, length = 20,
+              nullable = false, pk = false, fk = false, reference = "", unique = false, delete = "cascade")
     private String firstName;
 
     @MyColumn(  name = "last_name",type = ColumnType.VARCHAR,length = 20,
@@ -103,7 +104,7 @@ public class Customer extends MySavable
         this.credential = credential;
         this.accounts = new ArrayList<>();
     }
-    public Customer(MySavable savable)
+    public Customer(com.revature.orm.MySavable savable)
     {
         this.email = ((Customer) savable).email;
         this.firstName = ((Customer) savable).firstName;
@@ -114,8 +115,23 @@ public class Customer extends MySavable
         this.credential = ((Customer) savable).credential;
     }
 
-    public Customer()
+    public Customer(String ssn)
     {
+        this.ssn = ssn;
         accounts = new ArrayList<>();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Customer{" +
+                       "firstName='" + firstName + '\'' +
+                       ", lastName='" + lastName + '\'' +
+                       ", ssn='" + ssn + '\'' +
+                       ", email='" + email + '\'' +
+                       ", phone='" + phone + '\'' +
+                       ", accounts=" + accounts +
+                       ", credential=" + credential +
+                       '}';
     }
 }

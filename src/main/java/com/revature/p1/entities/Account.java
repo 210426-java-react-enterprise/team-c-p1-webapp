@@ -1,9 +1,10 @@
 package com.revature.p1.entities;
 
 
-import com.revature.p1.annotations.ColumnType;
-import com.revature.p1.annotations.MyColumn;
-import com.revature.p1.annotations.MyEntity;
+import com.revature.orm.MySavable;
+import com.revature.orm.annotations.ColumnType;
+import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,8 @@ import java.util.List;
 @MyEntity(name = "account")
 public class Account extends MySavable
 {
-    @MyColumn(  name = "balance",nullable = false,unique = false,type = ColumnType.DECIMAL,
-                length = 0,pk = false,fk = false,reference = "",delete = "cascade")
+    @MyColumn(name = "balance", nullable = false, unique = false, type = ColumnType.DECIMAL,
+              length = 0, pk = false, fk = false, reference = "", delete = "cascade")
     private double balance;
 
     @MyColumn(  name = "number",nullable = false,unique = true,type = ColumnType.SERIAL,

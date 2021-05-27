@@ -1,9 +1,9 @@
 package com.revature.p1.entities;
 
 
-import com.revature.p1.annotations.ColumnType;
-import com.revature.p1.annotations.MyColumn;
-import com.revature.p1.annotations.MyEntity;
+import com.revature.orm.annotations.ColumnType;
+import com.revature.orm.annotations.MyColumn;
+import com.revature.orm.annotations.MyEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class TrustAccount extends Account
     @Override
     public double withdraw(double amount)
     {
-        if (amount > balance) return balance;
+        if (amount > balance) return -1;
         this.balance -= amount;
         transactions.add(new Transaction("withdraw", amount, balance, number));
         return balance;
