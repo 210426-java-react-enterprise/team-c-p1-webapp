@@ -1,15 +1,15 @@
 package com.revature.dtos;
 
-public class Credentials {
+public class CredentialDTO {
 
     private String username;
     private String password;
 
-    public Credentials() {
+    public CredentialDTO() {
 
     }
 
-    public Credentials(String username, String password) {
+    public CredentialDTO(String username, String password) {
         this.username = username;
         this.password = password;
     }
