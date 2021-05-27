@@ -1,7 +1,6 @@
 package com.revature.web;
 
 import com.revature.daos.AccountDAO;
-import com.revature.daos.UserDAO;
 import com.revature.p1.repos.DataSource;
 import com.revature.p1.utils.EntityManager;
 import com.revature.services.BankService;
@@ -40,15 +39,12 @@ public class DependencyLoaderListener implements ServletContextListener {
 
         EntityManager em = new EntityManager();
 
-
-
-        UserDAO userDAO = new UserDAO(em);
         AccountDAO accountDAO = new AccountDAO(em);
         BankService bankService = new BankService(em, accountDAO);
         TableBuilder builder = new TableBuilder();
 
-        AccountServlet accountServlet = new AccountServlet(bankService, userDAO, accountDAO, builder);
-        AuthServlet authServlet = new AuthServlet(bankService, userDAO, accountDAO);
+        AccountServlet accountServlet = new AccountServlet(bankService, accountDAO, builder);
+        AuthServlet authServlet = new AuthServlet(bankService, accountDAO);
 
         ServletContext context = sce.getServletContext();
         context.addServlet("BankServlet", accountServlet).addMapping("/account/*");

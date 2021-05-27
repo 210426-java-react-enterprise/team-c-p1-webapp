@@ -2,7 +2,6 @@ package com.revature.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.daos.AccountDAO;
-import com.revature.daos.UserDAO;
 import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.exceptions.InvalidRequestException;
@@ -24,13 +23,11 @@ import java.util.List;
 public class AccountServlet extends HttpServlet {
 
     private BankService bankService;
-    private UserDAO userDAO;
     private AccountDAO accountDAO;
     private TableBuilder tableBuilder;
 
-    public AccountServlet(BankService bankService, UserDAO userDAO, AccountDAO accountDAO, TableBuilder tableBuilder) {
+    public AccountServlet(BankService bankService, AccountDAO accountDAO, TableBuilder tableBuilder) {
         this.bankService = bankService;
-        this.userDAO = userDAO;
         this.accountDAO = accountDAO;
         this.tableBuilder = tableBuilder;
     }
@@ -57,8 +54,8 @@ public class AccountServlet extends HttpServlet {
 
                     AccountDTO newAccount = mapper.readValue(req.getInputStream(), AccountDTO.class);
                     accounts = (List<Account>) session.getAttribute("user-accounts");
-
                     Account account = bankService.validateAccount(newAccount, user.getUserID());
+
                     accounts.add(account);
                     session.setAttribute("user-accounts", accounts);
                     resp.setStatus(201);
@@ -88,13 +85,14 @@ public class AccountServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. </br> " + e.getMessage());
+                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
                 }
                 break;
             case "manage" :
                 try {
                     accounts = (ArrayList<Account>) session.getAttribute("user-accounts");
                     TransactionDTO trans = mapper.readValue(req.getInputStream(), TransactionDTO.class);
+
                     bankService.handleTransaction(trans, accounts, user);
                     resp.setStatus(200);
                     writer.write("Transaction successful!");

@@ -2,7 +2,6 @@ package com.revature.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.daos.AccountDAO;
-import com.revature.daos.UserDAO;
 import com.revature.dtos.CredentialDTO;
 import com.revature.dtos.newUserDTO;
 import com.revature.exceptions.AuthenticationException;
@@ -23,12 +22,10 @@ import java.util.List;
 public class AuthServlet extends HttpServlet {
 
     private BankService bankService;
-    private UserDAO userDAO;
     private AccountDAO accountDAO;
 
-    public AuthServlet(BankService bankService, UserDAO userDAO, AccountDAO accountDAO) {
+    public AuthServlet(BankService bankService, AccountDAO accountDAO) {
         this.bankService = bankService;
-        this.userDAO = userDAO;
         this.accountDAO = accountDAO;
     }
 
@@ -59,9 +56,12 @@ public class AuthServlet extends HttpServlet {
                 try {
                     CredentialDTO creds = mapper.readValue(req.getInputStream(), CredentialDTO.class);
                     User user = bankService.validateUser(creds);
+
                     resp.setStatus(202);
                     req.getSession().setAttribute("this-user", user);
+
                     List<Account> accounts = accountDAO.getAccountsByUserID(user);
+
                     req.getSession().setAttribute("user-accounts", accounts);
                     writer.write(user.toString() + " with accounts: " + accounts);
                 } catch (AuthenticationException e) {
@@ -69,7 +69,7 @@ public class AuthServlet extends HttpServlet {
                     writer.write(e.getMessage());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    writer.write(e.getMessage());
+                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
                     resp.setStatus(500);
                 }
                 break;
@@ -77,6 +77,7 @@ public class AuthServlet extends HttpServlet {
                 try {
                     newUserDTO newUser = mapper.readValue(req.getInputStream(), newUserDTO.class);
                     User user = bankService.validateUser(newUser);
+
                     req.setAttribute("this-user", user);
                     resp.setStatus(201);
                     writer.write(user.toString());
@@ -86,7 +87,7 @@ public class AuthServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    resp.getWriter().write("Something went wrong internally");
+                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
                 }
                 break;
             default:

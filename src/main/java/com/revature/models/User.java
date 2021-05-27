@@ -57,8 +57,6 @@ public class User {
         this.setAge(age);
     }
 
-
-
     public String getUsername() {
         return username;
     }
@@ -114,7 +112,6 @@ public class User {
     public void setUserID(int userID) {
         this.userID = userID;
     }
-
 
     @Override
     public String toString() {

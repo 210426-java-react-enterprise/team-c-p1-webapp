@@ -23,8 +23,6 @@ public class Account {
     @Column(isDouble = true)
     private double balance;
 
-
-
     public Account() {
 
     }

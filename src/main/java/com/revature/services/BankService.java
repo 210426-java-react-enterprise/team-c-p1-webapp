@@ -85,12 +85,10 @@ public class BankService {
 
             accountDAO.linkAccount(userID, newAccount.getAccountID());
 
-
             return newAccount;
         } catch (NumberFormatException e) {
             throw new InvalidRequestException("The balance was invalid");
         }
-
 
     }
 
@@ -116,6 +114,7 @@ public class BankService {
             case "deposit":
                 transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
                         user.getUsername(), userAccount.getAccountID(), amount, "deposit");
+
                 userAccount.setBalance(userAccount.getBalance() + amount);
                 em.update(userAccount);
                 em.save(transaction);
@@ -123,6 +122,7 @@ public class BankService {
             case "withdraw":
                 transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
                         user.getUsername(), userAccount.getAccountID(), amount, "withdrawal");
+
                 if (amount > userAccount.getBalance()) {
                     throw new InvalidRequestException("You cannot withdraw more than what you have!");
                 }
@@ -137,10 +137,13 @@ public class BankService {
                 }
                 Account recipient = (Account) em.get(Account.class, recipientID);
                 String recipientName = accountDAO.getUserNameFromAccount(recipientID);
+
                 userAccount.setBalance(userAccount.getBalance() - amount);
                 recipient.setBalance(recipient.getBalance() + amount);
+
                 transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
                         recipientName, recipientID, amount, "transfer");
+
                 em.save(recipient);
                 em.update(userAccount);
                 em.save(transaction);
