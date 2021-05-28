@@ -12,8 +12,11 @@ import com.revature.models.Transaction;
 import com.revature.models.User;
 import com.revature.p1.utils.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BankService {
 
@@ -33,6 +36,16 @@ public class BankService {
         } else {
             throw new AuthenticationException("The username or password was invalid");
         }
+    }
+
+    public List<Transaction> getUserTransactions(User loggedInUser) {
+        List<Transaction> list1 = em.getAllOnCondition(Transaction.class, "sender_name", loggedInUser.getUsername());
+        List<Transaction> list2 = em.getAllOnCondition(Transaction.class, "recipient_name", loggedInUser.getUsername());
+        List<Transaction> result = new ArrayList<>();
+
+        result.addAll(list1);
+        result.addAll(list2); //I could have streamed this using Stream.concat, but it was giving me trouble and I just want to be done.
+        return result;
     }
 
     public User getUser(int id) {

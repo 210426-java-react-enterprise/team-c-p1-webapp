@@ -6,6 +6,7 @@ import com.revature.dtos.AccountDTO;
 import com.revature.dtos.TransactionDTO;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.models.Account;
+import com.revature.models.Transaction;
 import com.revature.models.User;
 import com.revature.services.BankService;
 import com.revature.util.TableBuilder;
@@ -51,7 +52,6 @@ public class AccountServlet extends HttpServlet {
         switch (req.getParameter("action")) {
             case "open" : {
                 try {
-
                     AccountDTO newAccount = mapper.readValue(req.getInputStream(), AccountDTO.class);
                     accounts = (List<Account>) session.getAttribute("user-accounts");
                     Account account = bankService.validateAccount(newAccount, user.getUserID());
@@ -70,24 +70,6 @@ public class AccountServlet extends HttpServlet {
                 }
             }
             break;
-            case "view" :
-                try {
-                    accounts = accountDAO.getAccountsByUserID(user);
-
-                    if(accounts.isEmpty()) {
-                        resp.setStatus(404);
-                        writer.write("Either something is wrong on our end or you have no registered accounts");
-                        return;
-                    }
-
-                    writer.write(String.valueOf(tableBuilder.buildAccountTable(accounts)));
-                    resp.setStatus(201);
-                } catch (Exception e) {
-                    resp.setStatus(500);
-                    e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
-                }
-                break;
             case "manage" :
                 try {
                     accounts = (ArrayList<Account>) session.getAttribute("user-accounts");
@@ -110,8 +92,61 @@ public class AccountServlet extends HttpServlet {
                 writer.write("Nothing was found by this action. Check the URL and try again.");
         }
 
-
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        ObjectMapper mapper = new ObjectMapper();
+        PrintWriter writer = resp.getWriter();
 
+        if(session == null) {
+            writer.write("You must be logged in to perform this action.");
+            resp.setStatus(404);
+            return;
+        }
+
+        List<Account> accounts;
+        User user = (User) session.getAttribute("this-user");
+
+        switch (req.getParameter("view")) {
+            case "account" :
+                try {
+                    accounts = accountDAO.getAccountsByUserID(user);
+
+                    if(accounts.isEmpty()) {
+                        resp.setStatus(404);
+                        writer.write("You have no registered accounts.");
+                        return;
+                    }
+
+                    writer.write(String.valueOf(tableBuilder.buildAccountTable(accounts)));
+                    resp.setStatus(200);
+                } catch (Exception e) {
+                    resp.setStatus(500);
+                    e.printStackTrace();
+                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                }
+                break;
+            case "transaction" :
+                try {
+                    List<Transaction> transactions = bankService.getUserTransactions(user);
+
+                    if(transactions.isEmpty()) {
+                        resp.setStatus(404);
+                        writer.write("You have no transactions to list.");
+                    }
+
+                    writer.write(String.valueOf(tableBuilder.buildTransactionTable(transactions)));
+                } catch (Exception e) {
+                    resp.setStatus(500);
+                    e.printStackTrace();
+                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                }
+                break;
+            default:
+                resp.setStatus(404);
+                writer.write("Nothing was found by this action. Check the URL and try again.");
+        }
+    }
 }
