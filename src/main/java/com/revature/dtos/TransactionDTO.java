@@ -11,6 +11,13 @@ public class TransactionDTO {
 
     }
 
+    public TransactionDTO(String id, String amount, String recipient, String action) {
+        this.id = id;
+        this.amount = amount;
+        this.recipient = recipient;
+        this.action = action;
+    }
+
     public String getId() {
         return id;
     }
