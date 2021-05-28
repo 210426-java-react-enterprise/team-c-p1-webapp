@@ -8,7 +8,6 @@ import com.revature.dtos.newUserDTO;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.models.Account;
-import com.revature.models.Transaction;
 import com.revature.models.User;
 import com.revature.p1.utils.EntityManager;
 import org.junit.After;
@@ -189,9 +188,45 @@ public class BankServiceTest {
     }
 
     @Test
-    public void whenRegisterUserWithInvalidAge_thenThrowException() {
+    public void whenRegisterUserWithHighAge_thenThrowException() {
         //Arrange
         newUserDTO newUser = new newUserDTO("username", "password", "email@amail", "first", "last", "230");
+
+        when(mockEM.save(any())).thenReturn(null);
+
+        //Act
+        try {
+            sut.registerUser(newUser);
+        } catch (Exception e) {
+            assertTrue(e instanceof InvalidRequestException);
+            assertEquals("The age was invalid", e.getMessage());
+        } finally {
+            verify(mockEM, times(0)).save(any());
+        }
+    }
+
+    @Test
+    public void whenRegisterUserWithInvalidAge_thenThrowException() {
+        //Arrange
+        newUserDTO newUser = new newUserDTO("username", "password", "email@amail", "first", "last", "2asdf");
+
+        when(mockEM.save(any())).thenReturn(null);
+
+        //Act
+        try {
+            sut.registerUser(newUser);
+        } catch (Exception e) {
+            assertTrue(e instanceof InvalidRequestException);
+            assertEquals("The age was invalid", e.getMessage());
+        } finally {
+            verify(mockEM, times(0)).save(any());
+        }
+    }
+
+    @Test
+    public void whenRegisterUserWithKiwAge_thenThrowException() {
+        //Arrange
+        newUserDTO newUser = new newUserDTO("username", "password", "email@amail", "first", "last", "-1");
 
         when(mockEM.save(any())).thenReturn(null);
 
@@ -297,6 +332,32 @@ public class BankServiceTest {
         } catch (Exception e) {
             assertTrue(e instanceof InvalidRequestException);
             assertEquals("The user account did not exist", e.getMessage());
+        } finally {
+            //Assert
+            verify(mockEM, times(0)).save(any());
+            verify(mockEM, times(0)).update(any());
+        }
+
+    }
+
+    @Test
+    public void whenHandleTransactionDepositWithInvalidAmounts_thenThrowException() {
+        //Arrange
+        List<Account> accounts = new ArrayList<>();
+        User user = new User(1, "username", "password", "email@email", "first", "last", 23);
+        accounts.add(new Account(1, 200, "checking")); //accountID is zero this time
+        TransactionDTO transaction = new TransactionDTO("1", "2asdf", "2asd", "deposit");
+        newUserDTO newUser = new newUserDTO("username", "password", "email@amail", "first", "last", "23");
+
+        when(mockEM.save(any())).thenReturn(null);
+        when(mockEM.update(any())).thenReturn(true);
+
+        //act
+        try {
+            sut.handleTransaction(transaction, accounts, user);
+        } catch (Exception e) {
+            assertTrue(e instanceof InvalidRequestException);
+            assertEquals("An invalid number was supplied", e.getMessage());
         } finally {
             //Assert
             verify(mockEM, times(0)).save(any());
