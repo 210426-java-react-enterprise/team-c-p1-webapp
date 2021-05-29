@@ -1,8 +1,9 @@
 package com.revature.p1.screens;
 
 
+import com.revature.orm.MyObjectRelationalMapper;
+import com.revature.orm.MySavable;
 import com.revature.p1.entities.*;
-import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
 import com.revature.p1.utilities.ScreenManager;
 import com.revature.p1.utilities.datasource.Session;
@@ -38,11 +39,13 @@ public class UserAccountScreen extends Screen
             return null;
 
         Account account = null;
-        for (MySavable acc : session.getCustomer().getAccounts())
+
+        for (MySavable mySavable : session.getCustomer()
+                                          .getAccounts())
         {
-            if (((Account)acc).getNumber() == Integer.getInteger(input))
+            if (((Account) mySavable).getNumber() == Integer.getInteger(input))
             {
-                account = (Account) acc;
+                account = (Account) mySavable;
                 return account;
             }
         }

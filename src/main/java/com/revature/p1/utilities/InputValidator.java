@@ -4,8 +4,8 @@ package com.revature.p1.utilities;
     This class is responsible for user input validation.
  */
 
+import com.revature.orm.MyObjectRelationalMapper;
 import com.revature.p1.entities.Credential;
-import com.revature.p1.orms.MyObjectRelationalMapper;
 
 public class InputValidator {
 

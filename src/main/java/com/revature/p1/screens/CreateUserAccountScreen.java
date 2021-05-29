@@ -1,9 +1,9 @@
 package com.revature.p1.screens;
 
+import com.revature.orm.MyObjectRelationalMapper;
 import com.revature.p1.entities.Address;
 import com.revature.p1.entities.Credential;
 import com.revature.p1.entities.Customer;
-import com.revature.p1.orms.MyObjectRelationalMapper;
 import com.revature.p1.utilities.InputValidator;
 
 import java.util.Scanner;

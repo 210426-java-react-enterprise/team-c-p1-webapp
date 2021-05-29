@@ -1,10 +1,13 @@
 package com.revature.p1.utilities;
 
-import com.revature.p1.orms.MyObjectRelationalMapper;
+import com.revature.orm.MyObjectRelationalMapper;
 import com.revature.p1.persistance.ConnectionManager;
 import com.revature.p1.screens.*;
 import com.revature.p1.services.UserService;
+import com.revature.p1.services.WebUserService;
 import com.revature.p1.utilities.datasource.Session;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -31,27 +34,21 @@ public class Controller {
     private final ScreenManager screenManager;
     private final Session session;
     private final UserService userService;
-
+    private final WebUserService webUserService;
+    private final Logger logger;
 
     public Controller()
     {
-//        properties = new Properties();
-//        try {
-//            properties.load(new FileReader("src/main/resources/application.properties"));
-//
-//        } catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
-
+        this.logger = LogManager.getLogger();
+        logger.info("Initializing objects and dependencies");
         this.connectionManager = new ConnectionManager();
-        this.connection = this.connectionManager.getConnection();
+        this.connection = connectionManager.getConnection();
         this.orm = new MyObjectRelationalMapper(connection);
         this.session = new Session(null, null, null, null,orm);
         this.userService = new UserService(orm, null, session);
 
         this.inputValidator = new InputValidator(orm);
-
+        this.webUserService = new WebUserService(orm,inputValidator,logger);
         scanner = new Scanner(System.in);
         this.screens = new ArrayList<>();
         this.screenManager = new ScreenManager(screens);
