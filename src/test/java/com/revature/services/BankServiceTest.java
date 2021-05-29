@@ -42,7 +42,7 @@ public class BankServiceTest {
     }
 
     @Test
-    public void whenValidateUserWithValidCreds_thenReturnUser() {
+    public void whenValidateUserWithValidCredentials_thenReturnUser() {
         //Arrange
         CredentialDTO credentials = new CredentialDTO("username", "password");
         User expected = new User(1, "username", "password", "email@email", "first", "last", 23);
