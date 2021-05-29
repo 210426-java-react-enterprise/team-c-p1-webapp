@@ -7,6 +7,8 @@ phases:
   pre_build:
     commands:
       - echo Nothing to do in the pre_build phase...
+      aws s3 cp s3://my-local-maven-repo/snapshot/ORM/target/orm-0.1.jar ~/.m2/repository/com/revature/orm/0.1/orm-0.1.jar
+
   build:
     commands:
       - echo Build started on `date`
