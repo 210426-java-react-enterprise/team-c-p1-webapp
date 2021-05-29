@@ -7,6 +7,12 @@ public class AccountDTO {
     }
 
     private String name;
+
+    public AccountDTO(String name, String balance) {
+        this.name = name;
+        this.balance = balance;
+    }
+
     private String balance;
 
     public String getName() {

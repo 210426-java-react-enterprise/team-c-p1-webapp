@@ -2,7 +2,9 @@ package com.revature.models;
 
 import com.revature.p1.utils.annotations.*;
 
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 @Entity(name = "transactions")
 public class Transaction {
@@ -26,7 +28,7 @@ public class Transaction {
     @Column(name = "transaction_type")
     private String transactionType;
 
-    @Column
+    @Column(isDouble = true)
     private double amount;
 
     public Transaction () {
@@ -122,5 +124,10 @@ public class Transaction {
         sb.append(", amount=").append(amount);
         sb.append('}');
         return sb.toString();
+    }
+
+    public String getAmountFormatted() {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+        return formatter.format(amount);
     }
 }

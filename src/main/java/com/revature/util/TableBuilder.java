@@ -2,6 +2,7 @@ package com.revature.util;
 
 
 import com.revature.models.Account;
+import com.revature.models.Transaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,22 @@ public class TableBuilder {
             accountMap.put("Balance", account.getBalanceFormatted());
             tables.add(buildHtmlTable("Account", accountMap));
         });
+        return tables;
+    }
+
+    public List<String> buildTransactionTable(List<Transaction> transactions) {
+        List<String> tables = new ArrayList<>();
+
+        transactions.forEach(transaction -> {
+            Map<String, Object> transactionMap = new HashMap<>();
+            transactionMap.put("Id", transaction.getTransactionID());
+            transactionMap.put("Sender", transaction.getSender());
+            transactionMap.put("Recipient", transaction.getRecipient());
+            transactionMap.put("Amount", transaction.getAmountFormatted());
+            transactionMap.put("Type", transaction.getTransactionType());
+            tables.add(buildHtmlTable("Transaction", transactionMap));
+        });
+
         return tables;
     }
 

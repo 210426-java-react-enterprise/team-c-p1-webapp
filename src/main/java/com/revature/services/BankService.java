@@ -12,8 +12,11 @@ import com.revature.models.Transaction;
 import com.revature.models.User;
 import com.revature.p1.utils.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BankService {
 
@@ -26,21 +29,26 @@ public class BankService {
     }
 
     public User validateUser(CredentialDTO creds) {
-        List<User> soughtUser = em.getAllOnCondition(User.class, "username", creds.getUsername());
+        User soughtUser = em.getOneOnCondition(User.class, "username", creds.getUsername());
 
-        if (soughtUser != null && !soughtUser.isEmpty() && soughtUser.get(0).getPassword().equals(creds.getPassword())) {
-            return soughtUser.get(0);
+        if (soughtUser != null && soughtUser.getPassword().equals(creds.getPassword())) {
+            return soughtUser;
         } else {
             throw new AuthenticationException("The username or password was invalid");
         }
     }
 
-    public User getUser(int id) {
-        return (User) em.get(User.class, id);
+    public List<Transaction> getUserTransactions(User loggedInUser) {
+        List<Transaction> list1 = em.getAllOnCondition(Transaction.class, "sender_name", loggedInUser.getUsername());
+        List<Transaction> list2 = em.getAllOnCondition(Transaction.class, "recipient_name", loggedInUser.getUsername());
+        List<Transaction> result = new ArrayList<>();
+
+        result.addAll(list1);
+        result.addAll(list2); //I could have streamed this using Stream.concat, but it was giving me trouble and I just want to be done.
+        return result;
     }
 
-
-    public User validateUser(newUserDTO user) {
+    public User registerUser(newUserDTO user) {
 
         if (user.getFirstName() == null || user.getFirstName().trim().isEmpty() || user.getFirstName().length() > 50)
             throw new InvalidRequestException("The first name was invalid");
@@ -55,7 +63,7 @@ public class BankService {
             throw new InvalidRequestException("The last name was invalid");
 
         if (user.getUsername() == null || user.getUsername().trim().isEmpty() || user.getUsername().length() > 50)
-            throw new InvalidRequestException("The first name was invalid");
+            throw new InvalidRequestException("The username was invalid");
 
         try {
             int age = Integer.parseInt(user.getAge());
@@ -110,7 +118,7 @@ public class BankService {
                 .findFirst()
                 .orElseThrow(() -> new InvalidRequestException("The user account did not exist"));
 
-        switch (transactionDTO.getAction().toLowerCase(Locale.ROOT)) {
+        switch (transactionDTO.getAction().toLowerCase(Locale.ROOT).trim()) {
             case "deposit":
                 transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
                         user.getUsername(), userAccount.getAccountID(), amount, "deposit");

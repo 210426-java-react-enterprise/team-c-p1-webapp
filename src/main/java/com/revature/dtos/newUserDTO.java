@@ -15,6 +15,15 @@ public  class newUserDTO {
 
     }
 
+    public newUserDTO(String username, String password, String email, String firstName, String lastName, String age) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
+
     public String getUsername() {
         return username;
     }

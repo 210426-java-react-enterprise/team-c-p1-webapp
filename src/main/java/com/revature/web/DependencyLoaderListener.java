@@ -18,9 +18,6 @@ import java.util.Properties;
 public class DependencyLoaderListener implements ServletContextListener {
 
     private Properties props = new Properties();
-    private String url;
-    private String login;
-    private String password;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -38,10 +35,11 @@ public class DependencyLoaderListener implements ServletContextListener {
         }
 
         EntityManager em = new EntityManager();
+        TableBuilder builder = new TableBuilder();
 
         AccountDAO accountDAO = new AccountDAO(em);
         BankService bankService = new BankService(em, accountDAO);
-        TableBuilder builder = new TableBuilder();
+
 
         AccountServlet accountServlet = new AccountServlet(bankService, accountDAO, builder);
         AuthServlet authServlet = new AuthServlet(bankService, accountDAO);

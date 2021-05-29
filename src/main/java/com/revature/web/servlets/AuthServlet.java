@@ -76,7 +76,7 @@ public class AuthServlet extends HttpServlet {
             case "register":
                 try {
                     newUserDTO newUser = mapper.readValue(req.getInputStream(), newUserDTO.class);
-                    User user = bankService.validateUser(newUser);
+                    User user = bankService.registerUser(newUser);
 
                     req.setAttribute("this-user", user);
                     resp.setStatus(201);
