@@ -86,10 +86,8 @@
 <!--            <version>1.9.6</version>-->
 <!--        </dependency>-->
 
-
-
-
     </dependencies>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -106,6 +104,27 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <extensions>
+            <extension>
+                <groupId>com.github.platform-team</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>6.0.0</version>
+            </extension>
+        </extensions>
+
+
     </build>
-    
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>my-local-maven-repo</id>
+            <url>s3://my-local-maven-repo/snapshot</url>
+        </snapshotRepository>
+        <repository>
+            <id>my-local-maven-repo</id>
+            <url>s3://my-local-maven-repo/release</url>
+        </repository>
+    </distributionManagement>
+
 </project>
