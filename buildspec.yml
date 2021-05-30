@@ -11,10 +11,11 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - mvn install -DskipTests
+      - mvn package
   post_build:
     commands:
       - echo Build completed on `date`
+      - mv target/p1-1.war p1-1.war
 artifacts:
   files:
-    -  mv target/p1-1.war ROOT.war
+    -  p1-1.war
