@@ -25,43 +25,23 @@ public class DependencyLoaderListener implements ServletContextListener
     @Override
     public void contextInitialized(ServletContextEvent sce)
     {
-        System.out.println("*********************************Starting contextInitialized****************************************");
         ServletContext context = sce.getServletContext();
-        System.out.println("*********************************after context****************************************");
-
         try
         {
-            System.out.println("*********************************Starting try block****************************************");
-
             Logger logger = LogManager.getLogger();
-            System.out.println("*********************************After logger****************************************");
 
             ObjectMapper objectMapper = new JsonMapper();
-            System.out.println("*********************************After objectMapper****************************************");
-
             HtmlService htmlService = new HtmlService();
-            System.out.println("*********************************After htmlService****************************************");
-
             MyObjectRelationalMapper orm = new MyObjectRelationalMapper(ConnectionManager.getInstance()
                                                                                          .getConnection());
-            System.out.println("*********************************After orm****************************************");
-
-
             InputValidator iv = new InputValidator(orm);
-            System.out.println("*********************************After iv****************************************");
 
             WebUserService webUserService = new WebUserService(orm, iv, logger);
-            System.out.println("*********************************After webUserService****************************************");
-
-
             WelcomeServlet welcomeServlet = new WelcomeServlet(objectMapper, htmlService);
             AuthServlet authServlet = new AuthServlet(webUserService, objectMapper, logger, htmlService);
             AccountsServlet accountsServlet = new AccountsServlet(webUserService, objectMapper, logger, htmlService);
             NewAccountServlet newAccountServlet = new NewAccountServlet(webUserService, objectMapper, logger, htmlService);
             AccountServlet accountServlet = new AccountServlet(webUserService, objectMapper, logger, iv, htmlService);
-
-            System.out.println("*********************************After servlet instantiation****************************************");
-
 
             context.addServlet("welcomeServlet", welcomeServlet)
                    .addMapping("/");
@@ -74,7 +54,6 @@ public class DependencyLoaderListener implements ServletContextListener
             context.addServlet("accountServlet", accountServlet)
                    .addMapping("/user/account");
 
-            System.out.println("*********************************End of listener****************************************");
         } catch (Exception e)
         {
             e.printStackTrace();

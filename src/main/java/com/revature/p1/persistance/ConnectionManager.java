@@ -28,15 +28,6 @@ public class ConnectionManager {
             username = System.getProperty("username");
             password = System.getProperty("password");
 
-        System.out.println("***************************************host-url: " + url + "*********************************************");
-        System.out.println("***************************************username: " + username + "*********************************************");
-        System.out.println("***************************************password: " + password + "*********************************************");
-
-//            InputStream inputStream = Thread.currentThread()
-//                                            .getContextClassLoader()
-//                                            .getResourceAsStream("application.properties");
-//            props.load(inputStream);
-
     }
 
     public static ConnectionManager getInstance()
