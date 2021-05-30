@@ -26,6 +26,8 @@ public class DependencyLoaderListener implements ServletContextListener
     public void contextInitialized(ServletContextEvent sce)
     {
         System.out.println("*********************************Starting contextInitialized****************************************");
+        ServletContext context = sce.getServletContext();
+        System.out.println("*********************************after context****************************************");
 
         try
         {
@@ -59,11 +61,6 @@ public class DependencyLoaderListener implements ServletContextListener
             AccountServlet accountServlet = new AccountServlet(webUserService, objectMapper, logger, iv, htmlService);
 
             System.out.println("*********************************After servlet instantiation****************************************");
-
-
-            ServletContext context = sce.getServletContext();
-
-            System.out.println("*********************************After context****************************************");
 
 
             context.addServlet("welcomeServlet", welcomeServlet)
