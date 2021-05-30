@@ -25,9 +25,6 @@ public class DependencyLoaderListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
 
         System.out.println("*********************************Starting contextInitialized****************************************");
-        MyObjectRelationalMapper orm = new MyObjectRelationalMapper(ConnectionManager.getInstance()
-                                                                                             .getConnection());
-        System.out.println("*********************************After orm****************************************");
 
         Logger logger = LogManager.getLogger();
         System.out.println("*********************************After logger****************************************");
@@ -35,14 +32,21 @@ public class DependencyLoaderListener implements ServletContextListener {
         ObjectMapper objectMapper = new JsonMapper();
         System.out.println("*********************************After objectMapper****************************************");
 
+        HtmlService htmlService = new HtmlService();
+        System.out.println("*********************************After htmlService****************************************");
+
+        MyObjectRelationalMapper orm = new MyObjectRelationalMapper(ConnectionManager.getInstance()
+                                                                                             .getConnection());
+        System.out.println("*********************************After orm****************************************");
+
+
         InputValidator iv = new InputValidator(orm);
         System.out.println("*********************************After iv****************************************");
 
         WebUserService webUserService = new WebUserService(orm, iv, logger);
         System.out.println("*********************************After webUserService****************************************");
 
-        HtmlService htmlService = new HtmlService();
-        System.out.println("*********************************After htmlService****************************************");
+
 
 
 
