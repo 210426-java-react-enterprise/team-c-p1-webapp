@@ -6,7 +6,4 @@ public interface ConnectionPool
 {
     Connection getConnection();
     boolean releaseConnection(Connection connection);
-    String getConnectionURL();
-    String getUsername();
-    String getPassword();
 }

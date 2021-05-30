@@ -1,24 +1,27 @@
 package com.revature.p1.persistance;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 public class DbConnectionPool implements ConnectionPool
 {
-    private List<Connection> availableConnections;
-    private List<Connection> usedConnections;
+    private static final List<Connection> availableConnections;
+    private static final List<Connection> usedConnections;
     private static DbConnectionPool instance;
+    private static final String url;
+    private static final String username;
+    private static final String password;
 
-    private Properties properties= new Properties();;
-
-    static {
+    static
+    {
+        availableConnections = new ArrayList<>();
+        usedConnections = new ArrayList<>();
+        url = System.getProperty("host-url");
+        username = System.getProperty("username");
+        password = System.getProperty("password");
         try
         {
             Class.forName("org.postgresql.Driver");
@@ -28,50 +31,25 @@ public class DbConnectionPool implements ConnectionPool
         }
     }
 
-
     private DbConnectionPool()
     {
-
-        try
-        {
-            Map<String,String> map = System.getenv();
-            map.keySet().forEach(key -> System.out.println(key + ":\t" + map.get(key)));
-            System.out.println("*****************************************************************************");
-            Properties props = System.getProperties();
-
-            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties");
-            properties.load(input);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        this.availableConnections = new ArrayList<>();
-        this.usedConnections = new ArrayList<>();
     }
 
-    public void initialize()
-    {
-        if (instance != null) return;
-
-
-        List<Connection> connections = new ArrayList<>();
-        try
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                connections.add(DriverManager.getConnection(properties.getProperty("host-url"),properties.getProperty("username"),properties.getProperty("password")  ));
-            }
-        } catch(SQLException e)
-        {
-            e.printStackTrace();
-        }
-        instance = new DbConnectionPool();
-    }
     public static DbConnectionPool getInstance()
     {
         if (instance == null)
         {
             instance = new DbConnectionPool();
+            try
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    availableConnections.add(DriverManager.getConnection(url,username,password));
+                }
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
@@ -79,7 +57,6 @@ public class DbConnectionPool implements ConnectionPool
     @Override
     public Connection getConnection()
     {
-        initialize();
         Connection connection = availableConnections.remove(availableConnections.size() - 1);
         usedConnections.add(connection);
         System.out.println("Available connections: " + availableConnections.size());
@@ -92,24 +69,6 @@ public class DbConnectionPool implements ConnectionPool
     {
         availableConnections.add(connection);
         return usedConnections.remove(connection);
-    }
-
-    @Override
-    public String getConnectionURL()
-    {
-        return null;
-    }
-
-    @Override
-    public String getUsername()
-    {
-        return null;
-    }
-
-    @Override
-    public String getPassword()
-    {
-        return null;
     }
 
 
