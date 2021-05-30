@@ -18,7 +18,9 @@ phases:
       - mkdir artifact
       - unzip target/p1-1.war -d artifact/
       - mv artifact/WEB-INF WEB-INF
+      - mv artifact/META-INF META-INF
 artifacts:
   files:
     - WEB-INF/**/*
+    - META-INF/**/*
   name: artifact
