@@ -1,7 +1,5 @@
 package com.revature.p1.persistance;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,6 +10,9 @@ public class ConnectionManager {
 
     private Properties props = new Properties();
     public static ConnectionManager connectionManager;
+    private String url;
+    private String username;
+    private String password;
 
     static {
         try {
@@ -23,16 +24,19 @@ public class ConnectionManager {
 
     public ConnectionManager()
     {
-        try
-        {
-            InputStream inputStream = Thread.currentThread()
-                                            .getContextClassLoader()
-                                            .getResourceAsStream("application.properties");
-            props.load(inputStream);
-        }  catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+            url = System.getProperty("host-url");
+            username = System.getProperty("username");
+            password = System.getProperty("password");
+
+        System.out.println("***************************************host-url: " + url + "*********************************************");
+        System.out.println("***************************************username: " + username + "*********************************************");
+        System.out.println("***************************************password: " + password + "*********************************************");
+
+//            InputStream inputStream = Thread.currentThread()
+//                                            .getContextClassLoader()
+//                                            .getResourceAsStream("application.properties");
+//            props.load(inputStream);
+
     }
 
     public static ConnectionManager getInstance()
@@ -49,9 +53,7 @@ public class ConnectionManager {
         Connection connection = null;
         try
         {
-            connection = DriverManager.getConnection(props.getProperty("host-url"),
-                                                     props.getProperty("username"),
-                                                     props.getProperty("password"));
+            connection = DriverManager.getConnection(url,username,password);
         } catch (SQLException e)
         {
             e.printStackTrace();
