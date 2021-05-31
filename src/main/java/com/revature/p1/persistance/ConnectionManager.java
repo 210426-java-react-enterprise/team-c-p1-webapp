@@ -9,7 +9,6 @@ public class ConnectionManager {
     public static ConnectionManager connectionManager;
     public DbConnectionPool connectionPool;
 
-
     public ConnectionManager()
     {
         connectionPool = DbConnectionPool.getInstance();
