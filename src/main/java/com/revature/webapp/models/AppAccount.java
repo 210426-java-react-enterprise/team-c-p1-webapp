@@ -3,7 +3,7 @@ package com.revature.webapp.models;
 import com.revature.orm.annotations.Column;
 import com.revature.orm.annotations.Entity;
 import com.revature.orm.annotations.Id;
-import com.revature.orgitm.annotations.Table;
+import com.revature.orm.annotations.Table;
 
 @Entity
 @Table(name="app_account")

@@ -1,11 +1,11 @@
 package com.revature.webapp.dtos;
 
-public class LoginMapper {
+public class LoginDTO {
 
     private String username;
     private String password;
 
-    public LoginMapper() {
+    public LoginDTO() {
         super();
     }
 

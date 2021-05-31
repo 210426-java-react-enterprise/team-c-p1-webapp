@@ -2,7 +2,7 @@ package com.revature.webapp.web.servlet;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.webapp.dtos.LoginMapper;
+import com.revature.webapp.dtos.LoginDTO;
 import com.revature.webapp.service.UserService;
 
 import javax.servlet.ServletException;
@@ -29,7 +29,7 @@ public class AuthServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         try{
-            LoginMapper login = mapper.readValue(req.getInputStream(), LoginMapper.class);
+            LoginDTO login = mapper.readValue(req.getInputStream(), LoginDTO.class);
             HttpSession session = req.getSession(true);
             Credential crd = userService.authenticate(login);
             if(crd==null){

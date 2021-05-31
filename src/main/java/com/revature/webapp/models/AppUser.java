@@ -1,9 +1,9 @@
-package com.revature.assigments.orm.models;
+package com.revature.webapp.models;
 
-import com.revature.assigments.orm.annotations.Column;
-import com.revature.assigments.orm.annotations.Entity;
-import com.revature.assigments.orm.annotations.Id;
-import com.revature.assigments.orm.annotations.Table;
+import com.revature.orm.annotations.Column;
+import com.revature.orm.annotations.Entity;
+import com.revature.orm.annotations.Id;
+import com.revature.orm.annotations.Table;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,14 @@ public class AppUser {
     public AppUser(){
         super();
     }
-
+    
+    public AppUser(int id, String username, String password, String firstName, String lastName, String email){
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
     public AppUser(String username, String password, String firstName, String lastName, String email){
         this.username = username;
         this.password = password;
