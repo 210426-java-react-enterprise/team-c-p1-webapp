@@ -2,7 +2,6 @@ package com.revature.webapp.web;
 
 import com.revature.webapp.daos.UserDAO;
 import com.revature.webapp.web.servlet.UserServlet;
-import com.revature.webapp.repos.ConnectionPool;
 import com.revature.webapp.service.UserService;
 import com.revature.webapp.web.servlet.AuthServlet;
 

@@ -3,9 +3,6 @@ package com.revature.webapp.service;
 import com.revature.webapp.daos.UserDAO;
 import com.revature.webapp.dtos.LoginMapper;
 import com.revature.webapp.exceptions.CustomerNotFound;
-import com.revature.webapp.models.Credential;
-import com.revature.webapp.models.Customer;
-import com.revature.webapp.repos.ConnectionPool;
 import com.revature.orm.MyObjectRelationalMapper;
 
 import javax.naming.AuthenticationException;

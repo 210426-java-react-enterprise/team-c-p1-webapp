@@ -1,7 +1,6 @@
 package com.revature.webapp.web.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.webapp.models.Customer;
 import com.revature.webapp.service.UserService;
 
 import javax.servlet.ServletException;

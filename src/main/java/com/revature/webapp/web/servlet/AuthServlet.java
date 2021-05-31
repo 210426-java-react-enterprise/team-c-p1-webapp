@@ -3,7 +3,6 @@ package com.revature.webapp.web.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.webapp.dtos.LoginMapper;
-import com.revature.webapp.models.Credential;
 import com.revature.webapp.service.UserService;
 
 import javax.servlet.ServletException;
