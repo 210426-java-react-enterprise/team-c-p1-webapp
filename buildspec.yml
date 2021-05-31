@@ -19,8 +19,8 @@ phases:
 #      - unzip target/p1-1.war -d artifact/
 #      - mv artifact/WEB-INF WEB-INF
 #      - mv artifact/META-INF META-INF
-#artifacts:
-#  files:
-#    - WEB-INF/**/*
+artifacts:
+  files:
+    - p1-1.war
 #    - META-INF/**/*
 #  name: artifact
