@@ -15,12 +15,7 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-#      - mkdir artifact
-      - ls -a
       - unzip target/p1-1.war
-      - ls -a
-#      - mv artifact/WEB-INF WEB-INF
-#      - mv artifact/META-INF META-INF
 artifacts:
   files:
     - WEB-INF/**/*
