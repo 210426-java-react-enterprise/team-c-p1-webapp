@@ -2,6 +2,7 @@ package com.revature.webapp.web.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.webapp.dtos.UserDTO;
+import com.revature.webapp.exceptions.ObjectNotSaved;
 import com.revature.webapp.models.AppUser;
 import com.revature.webapp.service.UserService;
 
@@ -25,7 +26,7 @@ public class UserServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         PrintWriter write = resp.getWriter();
         resp.setContentType("application/json");
-    
+        
         try{
             UserDTO userData = mapper.readValue(req.getInputStream(), UserDTO.class);
     
@@ -33,9 +34,15 @@ public class UserServlet extends HttpServlet {
                                                    userData.getFirstName(), userData.getLastName(),
                                                    userData.getEmail());
             
+            resp.setStatus(200);
+            write.write("The user was saved!!!");
             
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch (ObjectNotSaved e){
+            resp.setStatus(409);
+            write.write("The user info could not be saved!!!");
+            
+        } catch (IOException e2) {
+            e2.printStackTrace();
         }
     
     

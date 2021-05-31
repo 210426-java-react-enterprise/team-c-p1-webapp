@@ -34,11 +34,11 @@ public class UserDTO {
     }
     
     public String getFirstName() {
-        return firsName;
+        return firstName;
     }
     
     public void setFirstName(String firsName) {
-        this.firsName = firsName;
+        this.firstName = firsName;
     }
     
     public String getLastName() {

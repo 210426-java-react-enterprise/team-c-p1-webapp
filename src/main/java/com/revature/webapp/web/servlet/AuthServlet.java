@@ -24,25 +24,26 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        ObjectMapper mapper = new ObjectMapper();
-        PrintWriter write = resp.getWriter();
-        resp.setContentType("application/json");
+//        ObjectMapper mapper = new ObjectMapper();
+//        PrintWriter write = resp.getWriter();
+//        resp.setContentType("application/json");
+//
+//        try{
+//            LoginDTO login = mapper.readValue(req.getInputStream(), LoginDTO.class);
+//            HttpSession session = req.getSession(true);
+//            Credential crd = userService.authenticate(login);
+//            if(crd==null){
+//                resp.setStatus(401);
+//            }else{
+//                resp.setStatus(200);
+//                write.write(mapper.writeValueAsString(crd.toString()));
+//            }
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
-        try{
-            LoginDTO login = mapper.readValue(req.getInputStream(), LoginDTO.class);
-            HttpSession session = req.getSession(true);
-            Credential crd = userService.authenticate(login);
-            if(crd==null){
-                resp.setStatus(401);
-            }else{
-                resp.setStatus(200);
-                write.write(mapper.writeValueAsString(crd.toString()));
-            }
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
+}
 }
