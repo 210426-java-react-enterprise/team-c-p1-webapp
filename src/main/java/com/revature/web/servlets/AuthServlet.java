@@ -63,14 +63,13 @@ public class AuthServlet extends HttpServlet {
                     List<Account> accounts = accountDAO.getAccountsByUserID(user);
 
                     req.getSession().setAttribute("user-accounts", accounts);
-                    //writer.write(user.toString() + " with accounts: " + accounts);
                     writer.write(String.format("<h1>Hello, %s!</h1>", user.getFirstName()));
                 } catch (AuthenticationException e) {
                     resp.setStatus(401);
                     writer.write(e.getMessage());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                    writer.write(String.format("Something went wrong internally. (%s)", e.getMessage()));
                     resp.setStatus(500);
                 }
                 break;
@@ -88,7 +87,7 @@ public class AuthServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                    writer.write(String.format("Something went wrong internally. (%s)", e.getMessage()));
                 }
                 break;
             default:

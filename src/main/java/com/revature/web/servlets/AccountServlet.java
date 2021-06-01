@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -68,7 +67,7 @@ public class AccountServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                    writer.write(String.format("Something went wrong internally. (%s)", e.getMessage()));
                 }
                 break;
             case "manage":
@@ -85,7 +84,7 @@ public class AccountServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                    writer.write(String.format("Something went wrong internally. (%s)", e.getMessage()));
                 }
                 break;
             default:
@@ -125,7 +124,7 @@ public class AccountServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                    writer.write(String.format("Something went wrong internally. (%s)", e.getMessage()));
                 }
                 break;
             case "transaction":
@@ -141,7 +140,7 @@ public class AccountServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                    writer.write(String.format("Something went wrong internally. (%s)", e.getMessage()));
                 }
                 break;
             case "user-info":
@@ -150,7 +149,7 @@ public class AccountServlet extends HttpServlet {
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();
-                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                    writer.write(String.format("Something went wrong internally. (%s)", e.getMessage()));
                 }
                 break;
             default:
