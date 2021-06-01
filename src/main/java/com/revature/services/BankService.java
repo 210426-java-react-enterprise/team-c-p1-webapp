@@ -44,7 +44,9 @@ public class BankService {
         List<Transaction> result = new ArrayList<>();
 
         result.addAll(list1);
-        result.addAll(list2); //I could have streamed this using Stream.concat, but it was giving me trouble and I just want to be done.
+        //do not list transaction
+        result.addAll(list2.stream().filter(transaction -> !transaction.getRecipient().equals(loggedInUser.getUsername()))
+        .collect(Collectors.toList()));
         return result;
     }
 

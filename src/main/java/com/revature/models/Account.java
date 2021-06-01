@@ -10,7 +10,7 @@ import java.util.Locale;
  * <p>
  * POJO to represent a bank account within the application.
  */
-@Entity()
+@Entity
 public class Account {
 
     @Key
