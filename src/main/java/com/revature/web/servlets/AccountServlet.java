@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AccountServlet extends HttpServlet {
@@ -59,7 +61,7 @@ public class AccountServlet extends HttpServlet {
                     accounts.add(account);
                     session.setAttribute("user-accounts", accounts);
                     resp.setStatus(201);
-                    writer.write("Your new account was created! " + account);
+                    writer.write("<h1>Your new account was created! </h1>" + tableBuilder.buildAccountTable(Collections.singletonList(account)));
                 } catch (InvalidRequestException e) {
                     resp.setStatus(400);
                     writer.write(e.getMessage());
@@ -74,9 +76,9 @@ public class AccountServlet extends HttpServlet {
                     accounts = (ArrayList<Account>) session.getAttribute("user-accounts");
                     TransactionDTO trans = mapper.readValue(req.getInputStream(), TransactionDTO.class);
 
-                    bankService.handleTransaction(trans, accounts, user);
+                    Account userAccount = bankService.handleTransaction(trans, accounts, user);
                     resp.setStatus(200);
-                    writer.write("Transaction successful!");
+                    writer.write("<h1>Transaction successful! Your account details are as follows: <br> </h1>" + tableBuilder.buildAccountTable(Collections.singletonList(userAccount)));
                 } catch (InvalidRequestException e) {
                     resp.setStatus(400);
                     writer.write(e.getMessage());

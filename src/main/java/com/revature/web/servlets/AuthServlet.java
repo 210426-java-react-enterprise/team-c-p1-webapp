@@ -81,7 +81,7 @@ public class AuthServlet extends HttpServlet {
 
                     req.setAttribute("this-user", user);
                     resp.setStatus(201);
-                    writer.write(user.toString());
+                    writer.write(String.format("<h1>Welcome, %s</h1>", user.getFirstName()));
                 } catch (InvalidRequestException e) {
                     resp.setStatus(400);
                     writer.write(e.getMessage());
