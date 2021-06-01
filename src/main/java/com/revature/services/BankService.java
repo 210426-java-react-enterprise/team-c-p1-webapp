@@ -102,7 +102,7 @@ public class BankService {
 
     }
 
-    public boolean handleTransaction(TransactionDTO transactionDTO, List<Account> accounts, User user) {
+    public Account handleTransaction(TransactionDTO transactionDTO, List<Account> accounts, User user) {
 
         double amount;
         int recipientID;
@@ -128,7 +128,7 @@ public class BankService {
                 userAccount.setBalance(userAccount.getBalance() + amount);
                 em.update(userAccount);
                 em.save(transaction);
-                return true;
+                return userAccount;
             case "withdraw":
                 transaction = new Transaction(user.getUsername(), userAccount.getAccountID(),
                         user.getUsername(), userAccount.getAccountID(), amount, "withdrawal");
@@ -139,7 +139,7 @@ public class BankService {
                 userAccount.setBalance(userAccount.getBalance() - amount);
                 em.update(userAccount);
                 em.save(transaction);
-                return true;
+                return userAccount;
             case "transfer":
 
                 if (amount > userAccount.getBalance()) {
@@ -157,7 +157,7 @@ public class BankService {
                 em.save(recipient);
                 em.update(userAccount);
                 em.save(transaction);
-                return true;
+                return userAccount;
             default:
                 throw new InvalidRequestException("The action specified is not supported.");
         }
