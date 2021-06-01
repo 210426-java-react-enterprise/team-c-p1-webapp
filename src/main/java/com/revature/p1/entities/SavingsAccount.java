@@ -62,6 +62,7 @@ public class SavingsAccount extends Account{
 
     public SavingsAccount(String ssn)
     {
+        super(ssn);
         this.customerSsn = ssn;
         this.type = "savings";
         this.transactions = new ArrayList<>();

@@ -68,10 +68,12 @@ public class AccountsServlet extends HttpServlet
             logger.info(String.format("'req.getSession().getAttribute(\"user\")' is null"));
             writer.println("<h1 style=\"color:red;\"> You are not logged in.</h1>");
             writer.println("<h2 style=\"color:red;\"> To login do: GET /user/login");
-//            logger.info(String.format("Attempting to redirect..."));
-//            RequestDispatcher dispatcher = req.getRequestDispatcher("/login");
-//            dispatcher.forward(req, resp);
         }
 
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        response.getWriter().println("<h1> Nothing interesting here yet! </h1>");
     }
 }

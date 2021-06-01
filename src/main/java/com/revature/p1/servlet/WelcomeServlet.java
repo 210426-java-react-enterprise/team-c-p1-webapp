@@ -25,7 +25,7 @@ public class WelcomeServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        response.getWriter().println("<h1> Nothing interesting here yet! </h1>");
+        response.getWriter().println("<h1> Nothing interesting here yet! Why don't you try a GET? </h1>");
     }
 
     @Override
@@ -33,9 +33,7 @@ public class WelcomeServlet extends HttpServlet
     {
         PrintWriter writer = response.getWriter();
         writer.println("<h1 style=\"color:red;\"> Welcome to your friendly neighborhood bank. </h1>");
-        writer.println("<h2 style=\"color:blue;\"> To log in to your account do:\t GET to /user/login</h2>");
-        writer.println("<h2 style=\"color:blue;\"> To register for a new account do:\t GET /user/new </h2>");
-
+        writer.println("<h2 style=\"color:blue;\"> To log in to your account do:\t GET to /login</h2>");
 
     }
 }

@@ -36,7 +36,7 @@ public class AuthServlet extends HttpServlet
     {
         PrintWriter writer = resp.getWriter();
         writer.println("<h1 style=\"color:red\"> Please provide your username and password in the body using raw json and do POST</h1>");
-        String message = "{\n\t\"username\":\"your username here\",\n\t\"password\":\"your password here\"\n}";
+        String message = "{<br>\"username\":\"your username here\",<br>\"password\":\"your password here<br>\"}";
         writer.println("<h2 style=\"color:blue\">" + message + "</h2>");
         logger.info("Prompting user to log in");
 
@@ -63,8 +63,8 @@ public class AuthServlet extends HttpServlet
                 String first_name = customer.getFirstName().substring(0,1).toUpperCase () + customer.getFirstName().substring(1).toLowerCase();
                 writer.printf("<h1 style=\"color:red;\"> Welcome '%s' to your friendly neighborhood bank. </h1>", first_name);
                 writer.println("<h2 style=\"color:blue;\"> To view your accounts do:\t GET /user/accounts </h2>");
-                writer.println("<h2 style=\"color:blue;\"> To open a new account use:\t GET /user/account/new </h2>");
-                writer.println("<h2 style=\"color:blue;\"> To make a transaction use:\t GET /user/account/transaction/new </h2>");
+                writer.println("<h2 style=\"color:blue;\"> To open a new account use:\t GET /user/accounts/new </h2>");
+                writer.println("<h2 style=\"color:blue;\"> To make a transaction use:\t GET /user/transactions/new </h2>");
 
             } else
             {

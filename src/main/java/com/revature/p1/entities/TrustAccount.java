@@ -75,6 +75,7 @@ public class TrustAccount extends Account
 
     public TrustAccount(String ssn)
     {
+        super(ssn);
         this.customerSsn = ssn;
         this.type = "trust";
         this.transactions = new ArrayList<>();
