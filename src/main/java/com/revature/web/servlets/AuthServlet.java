@@ -54,8 +54,8 @@ public class AuthServlet extends HttpServlet {
         switch (action) {
             case "login":
                 try {
-                    CredentialDTO creds = mapper.readValue(req.getInputStream(), CredentialDTO.class);
-                    User user = bankService.validateUser(creds);
+                    CredentialDTO credentials = mapper.readValue(req.getInputStream(), CredentialDTO.class);
+                    User user = bankService.validateUser(credentials);
 
                     resp.setStatus(202);
                     req.getSession().setAttribute("this-user", user);
@@ -63,7 +63,8 @@ public class AuthServlet extends HttpServlet {
                     List<Account> accounts = accountDAO.getAccountsByUserID(user);
 
                     req.getSession().setAttribute("user-accounts", accounts);
-                    writer.write(user.toString() + " with accounts: " + accounts);
+                    //writer.write(user.toString() + " with accounts: " + accounts);
+                    writer.write(String.format("<h1>Hello, %s!</h1>", user.getFirstName()));
                 } catch (AuthenticationException e) {
                     resp.setStatus(401);
                     writer.write(e.getMessage());
@@ -95,5 +96,4 @@ public class AuthServlet extends HttpServlet {
                 resp.getWriter().write("The requested resource was not found.");
         }
     }
-
 }

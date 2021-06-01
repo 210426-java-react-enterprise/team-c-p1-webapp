@@ -4,10 +4,7 @@ package com.revature.util;
 import com.revature.models.Account;
 import com.revature.models.Transaction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 /**
  * TableBuilder to encapsulate Ozzy's HtmlBuilder, all credits to writing the builder go to him.
@@ -19,33 +16,40 @@ public class TableBuilder {
 
     }
 
-    public List<String> buildAccountTable(List<Account> accounts) {
+    public String buildAccountTable(List<Account> accounts) {
         List<String> tables = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
         accounts.forEach(account -> {
-            Map<String, Object> accountMap = new HashMap<>();
-            accountMap.put("Id", account.getAccountID());
-            accountMap.put("Name", account.getName());
-            accountMap.put("Balance", account.getBalanceFormatted());
-            tables.add(buildHtmlTable("Account", accountMap));
+            List<Pair<String, Object>> pairs = new ArrayList<>();
+            pairs.add(new Pair<>("Id", account.getAccountID()));
+            pairs.add(new Pair<>("Name", account.getName()));
+            pairs.add(new Pair<>("Balance", account.getBalanceFormatted()));
+            tables.add(buildHtmlTable("Account", pairs));
         });
-        return tables;
+
+        tables.forEach(sb::append);
+
+        return sb.toString();
     }
 
-    public List<String> buildTransactionTable(List<Transaction> transactions) {
+    public String buildTransactionTable(List<Transaction> transactions) {
         List<String> tables = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
         transactions.forEach(transaction -> {
-            Map<String, Object> transactionMap = new HashMap<>();
-            transactionMap.put("Id", transaction.getTransactionID());
-            transactionMap.put("Sender", transaction.getSender());
-            transactionMap.put("Recipient", transaction.getRecipient());
-            transactionMap.put("Amount", transaction.getAmountFormatted());
-            transactionMap.put("Type", transaction.getTransactionType());
-            tables.add(buildHtmlTable("Transaction", transactionMap));
+            List<Pair<String, Object>> pairs = new ArrayList<>();
+            pairs.add(new Pair<>("Id", transaction.getTransactionID()));
+            pairs.add(new Pair<>("Sender", transaction.getSender()));
+            pairs.add(new Pair<>("Recipient", transaction.getRecipient()));
+            pairs.add(new Pair<>("Amount", transaction.getAmountFormatted()));
+            pairs.add(new Pair<>("Type", transaction.getTransactionType()));
+            tables.add(buildHtmlTable("Transaction", pairs));
         });
 
-        return tables;
+        tables.forEach(sb::append);
+
+        return sb.toString();
     }
 
 
@@ -58,7 +62,7 @@ public class TableBuilder {
      * @return A String representing the HTML table
      * @author Oswaldo Castillo
      */
-    public String buildHtmlTable(String tableName, Map<?,?> tableMap){
+    private String buildHtmlTable(String tableName, List<Pair<String, Object>> tableMap){
         StringBuilder htmlString = new StringBuilder();
         //Insert font's links
         htmlString.append("<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">\n" +
@@ -106,11 +110,11 @@ public class TableBuilder {
         htmlString.append("<table class=\"customTable\">\n").append("  <h1>").append(tableName).append("</h1>\n");
         //Inserting Header
         htmlString.append("  <thead>\n");
-        tableMap.forEach((key1, value1) -> htmlString.append("      <th class = header-text>").append(key1).append("</th>\n"));
+        tableMap.forEach(pair -> htmlString.append("      <th class = header-text>").append(pair.getFirst()).append("</th>\n"));
         htmlString.append("  </thead>\n");
         //Insert row
         htmlString.append("<tr>\n");
-        tableMap.forEach((key, value) -> htmlString.append("      <td>").append(value).append("</td>\n"));
+        tableMap.forEach(pair -> htmlString.append("      <td>").append(pair.getSecond()).append("</td>\n"));
         htmlString.append("</tr>\n");
         htmlString.append("</table>");
 

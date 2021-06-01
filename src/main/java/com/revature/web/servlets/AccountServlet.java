@@ -40,7 +40,7 @@ public class AccountServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         PrintWriter writer = resp.getWriter();
 
-        if(session == null) {
+        if (session == null) {
             writer.write("You must be logged in to perform this action.");
             resp.setStatus(404);
             return;
@@ -50,7 +50,7 @@ public class AccountServlet extends HttpServlet {
         List<Account> accounts;
 
         switch (req.getParameter("action")) {
-            case "open" : {
+            case "open":
                 try {
                     AccountDTO newAccount = mapper.readValue(req.getInputStream(), AccountDTO.class);
                     accounts = (List<Account>) session.getAttribute("user-accounts");
@@ -68,9 +68,8 @@ public class AccountServlet extends HttpServlet {
                     e.printStackTrace();
                     writer.write("Something went wrong internally. (" + e.getMessage() + ")");
                 }
-            }
-            break;
-            case "manage" :
+                break;
+            case "manage":
                 try {
                     accounts = (ArrayList<Account>) session.getAttribute("user-accounts");
                     TransactionDTO trans = mapper.readValue(req.getInputStream(), TransactionDTO.class);
@@ -100,7 +99,7 @@ public class AccountServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         PrintWriter writer = resp.getWriter();
 
-        if(session == null) {
+        if (session == null) {
             writer.write("You must be logged in to perform this action.");
             resp.setStatus(404);
             return;
@@ -110,11 +109,11 @@ public class AccountServlet extends HttpServlet {
         User user = (User) session.getAttribute("this-user");
 
         switch (req.getParameter("view")) {
-            case "account" :
+            case "account":
                 try {
                     accounts = accountDAO.getAccountsByUserID(user);
 
-                    if(accounts.isEmpty()) {
+                    if (accounts.isEmpty()) {
                         resp.setStatus(404);
                         writer.write("You have no registered accounts.");
                         return;
@@ -128,11 +127,11 @@ public class AccountServlet extends HttpServlet {
                     writer.write("Something went wrong internally. (" + e.getMessage() + ")");
                 }
                 break;
-            case "transaction" :
+            case "transaction":
                 try {
                     List<Transaction> transactions = bankService.getUserTransactions(user);
 
-                    if(transactions.isEmpty()) {
+                    if (transactions.isEmpty()) {
                         resp.setStatus(404);
                         writer.write("You have no transactions to list.");
                     }
