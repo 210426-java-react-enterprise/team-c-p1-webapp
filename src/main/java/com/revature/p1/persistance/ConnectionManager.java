@@ -13,7 +13,6 @@ public class ConnectionManager {
     {
         connectionPool = DbConnectionPool.getInstance();
     }
-
     public static ConnectionManager getInstance()
     {
         if (connectionManager == null)
