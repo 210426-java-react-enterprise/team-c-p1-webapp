@@ -44,7 +44,7 @@ public class BankService {
         List<Transaction> result = new ArrayList<>();
 
         result.addAll(list1);
-        //do not list transaction
+        //do not re-list transactions where recipient name is the same as sender name
         result.addAll(list2.stream().filter(transaction -> !transaction.getRecipient().equals(loggedInUser.getUsername()))
         .collect(Collectors.toList()));
         return result;
@@ -115,6 +115,7 @@ public class BankService {
             throw new InvalidRequestException("An invalid number was supplied");
         }
 
+        //Get the account number specified in the transaction JSON
         Account userAccount = accounts.stream()
                 .filter(account -> String.valueOf(account.getAccountID()).equals(transactionDTO.getId()))
                 .findFirst()

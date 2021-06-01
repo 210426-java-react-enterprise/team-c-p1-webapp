@@ -98,7 +98,6 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
-        ObjectMapper mapper = new ObjectMapper();
         PrintWriter writer = resp.getWriter();
 
         if (session == null) {
@@ -139,6 +138,15 @@ public class AccountServlet extends HttpServlet {
                     }
 
                     writer.write(String.valueOf(tableBuilder.buildTransactionTable(transactions)));
+                } catch (Exception e) {
+                    resp.setStatus(500);
+                    e.printStackTrace();
+                    writer.write("Something went wrong internally. (" + e.getMessage() + ")");
+                }
+                break;
+            case "user-info":
+                try {
+                    writer.write(tableBuilder.buildUserTable(user));
                 } catch (Exception e) {
                     resp.setStatus(500);
                     e.printStackTrace();

@@ -3,6 +3,7 @@ package com.revature.util;
 
 import com.revature.models.Account;
 import com.revature.models.Transaction;
+import com.revature.models.User;
 
 import java.util.*;
 
@@ -50,6 +51,17 @@ public class TableBuilder {
         tables.forEach(sb::append);
 
         return sb.toString();
+    }
+
+    public String buildUserTable(User user) {
+        List<Pair<String, Object>> pairs = new ArrayList<>();
+        pairs.add(new Pair<>("Username", user.getUsername()));
+        pairs.add(new Pair<>("Email", user.getEmail()));
+        pairs.add(new Pair<>("First Name", user.getFirstName()));
+        pairs.add(new Pair<>("Last Name", user.getLastName()));
+        pairs.add(new Pair<>("Age", user.getAge()));
+
+        return buildHtmlTable("User", pairs);
     }
 
 
