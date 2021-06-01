@@ -52,7 +52,7 @@ public class DependencyLoaderListener implements ServletContextListener
             context.addServlet("newAccountServlet", newAccountServlet)
                    .addMapping("/user/accounts/new");
             context.addServlet("accountServlet", accountServlet)
-                   .addMapping("/user/account");
+                   .addMapping("/user/transactions/new");
 
         } catch (Exception e)
         {
