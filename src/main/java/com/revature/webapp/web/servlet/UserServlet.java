@@ -1,7 +1,9 @@
 package com.revature.webapp.web.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.orm.util.HtmlBuilder;
 import com.revature.webapp.dtos.UserDTO;
+import com.revature.webapp.dtos.UserDataRequestDTO;
 import com.revature.webapp.exceptions.ObjectNotSaved;
 import com.revature.webapp.models.AppUser;
 import com.revature.webapp.service.UserService;
@@ -12,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class UserServlet extends HttpServlet {
 
@@ -50,46 +55,30 @@ public class UserServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req,
-                    resp);
-        
-        
+ 
+    
+        ObjectMapper mapper = new ObjectMapper();
+        PrintWriter write = resp.getWriter();
+        resp.setContentType("application/json");
+    
+        UserDataRequestDTO userRequest = mapper.readValue(req.getInputStream(), UserDataRequestDTO.class);
+        AppUser user = new AppUser();
+        user = userService.bringUser(AppUser.class, userRequest.getUserField(),userRequest.getUserFieldValue());
+        if (user == null){
+            resp.setStatus(404);
+            write.write("The user couldn't be found");
+        }else{
+            resp.setStatus(200);
+            ArrayList<String> arrayData = new ArrayList<String>(Arrays.asList(user.toString().split(",")));
+            HashMap<String,String> dataTable = new HashMap<>();
+            arrayData.forEach(str -> {
+                String[] supportArray = str.split("=");
+                dataTable.put(supportArray[0].trim(),supportArray[1].trim());
+            });
+            write.write(HtmlBuilder.buildHtmlTable("Here is your user data",dataTable));
+        }
         
     }
     
-    //    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        PrintWriter write = resp.getWriter();
-//        resp.setContentType("application/son");
-//
-//        /*HttpSession session = req.getSession(true);
-//        Customer requestingCust = (session == null) ? null : (Customer) session.getAttribute("this-user");
-//
-//        if(requestingCust == null) {
-//            resp.setStatus(401);
-//            return;
-//        }*/
-//
-//        String custSSN = req.getParameter("ssn");
-//
-//        try{
-//            if (custSSN != null) {
-//              Customer customer = userService.bringCustomerData(custSSN);
-//                if(customer==null){
-//                    resp.setStatus(401);
-//                }else{
-//                    resp.setStatus(200);
-//                    write.write(mapper.writeValueAsString(customer.toString()));
-//                }
-//            }
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-
-
-
 }
 

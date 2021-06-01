@@ -21,5 +21,12 @@ public class UserService {
         
         return user;
    }
+   
+   public AppUser bringUser(Class<?> AppUser, String field,String fieldValue){
+        AppUser userData = new AppUser();
+        userData= objectService.bringObjectFromDbByField(AppUser, field, fieldValue);
+        return userData;
+   }
+   
 
 }
