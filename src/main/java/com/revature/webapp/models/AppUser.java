@@ -5,7 +5,6 @@ import com.revature.orm.annotations.Entity;
 import com.revature.orm.annotations.Id;
 import com.revature.orm.annotations.Table;
 
-import java.util.ArrayList;
 
 @Entity ()
 @Table(name = "app_user")
