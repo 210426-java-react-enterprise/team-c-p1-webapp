@@ -69,6 +69,7 @@ public class CheckingAccount extends Account{
 
     public CheckingAccount(String ssn)
     {
+        super(ssn);
         this.customerSsn = ssn;
         this.type = "checking";
         this.transactions = new ArrayList<>();

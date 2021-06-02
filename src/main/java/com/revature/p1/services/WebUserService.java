@@ -85,6 +85,7 @@ public class WebUserService
                     break;
                 case "trust":
                     customerAccounts.add(new TrustAccount(account));
+                    break;
             }
         }));
         savables.clear();

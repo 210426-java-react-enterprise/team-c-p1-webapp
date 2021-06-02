@@ -1,10 +1,13 @@
 package com.revature.p1.persistance;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class DbConnectionPool implements ConnectionPool
 {
@@ -14,14 +17,24 @@ public class DbConnectionPool implements ConnectionPool
     private static final String url;
     private static final String username;
     private static final String password;
+    private static final Properties props;
 
     static
     {
+        props = new Properties();
+        try {
+            props.load(new FileReader("src/main/resources/application.properties"));
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         availableConnections = new ArrayList<>();
         usedConnections = new ArrayList<>();
-        url = System.getProperty("host-url");
-        username = System.getProperty("username");
-        password = System.getProperty("password");
+        url = props.getProperty("host-url");
+        username = props.getProperty("username");
+        password = props.getProperty("password");
         try
         {
             Class.forName("org.postgresql.Driver");
@@ -66,6 +79,7 @@ public class DbConnectionPool implements ConnectionPool
         availableConnections.add(connection);
         return usedConnections.remove(connection);
     }
+
     public int getUsedConnectionSize()
     {
         return usedConnections.size();
