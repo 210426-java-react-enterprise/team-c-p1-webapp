@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 public class CreateUserAccountScreen extends Screen
 {
-
     private Scanner scanner;
     private InputValidator inputValidator;
     private MyObjectRelationalMapper orm;
@@ -27,7 +26,6 @@ public class CreateUserAccountScreen extends Screen
     @Override
     public void render()
     {
-
         System.out.println("\n\n\n*** Create a new user account ***\n\nEnter your desired username (5 - 15 alphanumeric): "); // edit to accept just
         // alphabetic usernames
         String readLine = scanner.nextLine();
@@ -98,8 +96,5 @@ public class CreateUserAccountScreen extends Screen
         orm.saveNewData(newAddress);
 
         System.out.println("Account created successfully.");
-
     }
-
-
 }
