@@ -84,7 +84,6 @@ public class DbConnectionPool implements ConnectionPool
         return usedConnections.remove(connection);
     }
 
-
     public int getUsedConnectionSize()
     {
         return usedConnections.size();
