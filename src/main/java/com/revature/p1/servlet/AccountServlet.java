@@ -53,13 +53,13 @@ public class AccountServlet extends HttpServlet
                                                .getAttribute("user"));
             logger.info(String.format("Number of accounts for this customer: %s", customer.getAccounts()
                                                                                           .size()));
-            //writer.println("<h4 style=\"color:red\"> " + account + "</h4>");
-            customer.getAccounts()
-                    .forEach(savable -> writer.println("<h3 style=\"color:red\"> " + savable));
             writer.println("<h2 style=\"color:blue\"> Do POST ");
-            writer.println("<h2 style=\"color:blue\">  {\"number\":\"your account number to use\",");
-            writer.println("<h2 style=\"color:blue\">  {\"type\":\"deposit/withdraw\",");
-            writer.println("<h2 style=\"color:blue\">  {\"amount\":\"amount to deposit/withdraw\",");
+            writer.println("<h2 style=\"color:blue\">  {<br/>\"number\":\"your account number to use\",");
+            writer.println("<h2 style=\"color:blue\">  \"type\":\"deposit/withdraw\",");
+            writer.println("<h2 style=\"color:blue\">  \"amount\":\"amount to deposit/withdraw\"<br/>}");
+
+            customer.getAccounts()
+                    .forEach(savable -> writer.println("<h5 style=\"color:blue\"> " + savable));
         }
         else
         {
@@ -76,7 +76,6 @@ public class AccountServlet extends HttpServlet
         PrintWriter writer = resp.getWriter();
         try
         {
-
             Customer customer = (Customer) req.getSession()
                                               .getAttribute("user");
             if (customer != null)

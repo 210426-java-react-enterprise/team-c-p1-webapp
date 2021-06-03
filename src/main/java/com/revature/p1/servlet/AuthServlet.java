@@ -36,7 +36,7 @@ public class AuthServlet extends HttpServlet
     {
         PrintWriter writer = resp.getWriter();
         writer.println("<h1 style=\"color:red\"> Please provide your username and password in the body using raw json and do POST</h1>");
-        String message = "{<br>\"username\":\"your username here\",<br>\"password\":\"your password here<br>\"}";
+        String message = "{<br>\"username\":\"your username here\",<br>\"password\":\"your password here\"<br>}";
         writer.println("<h2 style=\"color:blue\">" + message + "</h2>");
         logger.info("Prompting user to log in");
 
