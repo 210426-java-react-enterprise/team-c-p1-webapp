@@ -31,11 +31,9 @@ public class DbConnectionPool implements ConnectionPool
             e.printStackTrace();
         }
     }
-
     private DbConnectionPool()
     {
     }
-
     public static DbConnectionPool getInstance()
     {
         if (instance == null)
@@ -54,7 +52,6 @@ public class DbConnectionPool implements ConnectionPool
         }
         return instance;
     }
-
     @Override
     public Connection getConnection()
     {
@@ -64,7 +61,6 @@ public class DbConnectionPool implements ConnectionPool
         System.out.println("Used connections: " + usedConnections.size());
         return connection;
     }
-
     @Override
     public boolean releaseConnection(Connection connection)
     {
@@ -76,7 +72,6 @@ public class DbConnectionPool implements ConnectionPool
     {
         return usedConnections.size();
     }
-
     public int getAvailableConnectionSize()
     {
         return availableConnections.size();
