@@ -33,7 +33,13 @@ To-do list:
 ## Getting Started
 
 * Clone this repository using the following command: `git clone https://github.com/210426-java-react-enterprise/team-c-p1-webapp.git`
-* Switch to the richard-dev branch using the command: `git checkout richard-dev`
+* Clone the dependency using the following command: `git clone https://github.com/210426-java-react-enterprise/team-c-p1-orm.git`
+* Within that repository, run the commands:
+```
+git checkout richards-workshop
+mvn install
+```
+* Switch to the richard-dev branch (in the webapp) using the command: `git checkout richard-dev`
 * In src/main/resources, create an application.properties file using the following values(omit the angle brackets):
 ```
 db_url=<your database goes here>
